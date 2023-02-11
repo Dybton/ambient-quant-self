@@ -7,10 +7,14 @@ function App() {
       <div className="w-9/12 h-5/6 mt-6 border-2 border-amber-300 ">
         <h1 className="text-3xl text-center font-semi-bold">Dashboard</h1>
         <div className="w-9/12 h-5/6 mt-6 border-2 border-amber-600 mx-auto"> 
-          <div className="w-96 h-3/5 bg-red-500 float-left"></div>
-          <div className="w-96 h-3/5 bg-blue-500 float-right"></div>
-          <div className="w-96 h-2/5 bg-green-500 float-left"></div>
-          <div className="w-96 h-2/5 bg-yellow-500 float-right"></div>
+          <div className="w-3/6 h-full float-left">
+            <div className="bg-red-500 w-full h-3/6"></div>
+            <div className="bg-blue-500 w-full h-3/6"></div>
+          </div>
+          <div className="w-3/6 h-full bg-blue-500 float-right">
+            <div className="bg-blue-500 w-full h-3/6"></div>
+            <div className="bg-red-500 w-full h-3/6"></div>
+          </div>
         </div>
       </div>
     </div>
