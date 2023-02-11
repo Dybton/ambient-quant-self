@@ -5,7 +5,7 @@ function App() {
   return (
     <div className="flex h-screen w-screen justify-center items-center bg-gray-800" >
       <div className="w-9/12 h-5/6 mt-6 border-2 border-amber-300">
-        <p className='text-center'>Hej</p>
+        <h1 className="text-3xl text-center font-semi-bold">Dashboard</h1>
       </div>
     </div>
 
