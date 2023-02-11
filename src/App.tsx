@@ -4,17 +4,17 @@ import './App.css';
 function App() {
   return (
     <div className="flex h-screen w-screen justify-center items-center" >
-      <div className="w-9/12 h-5/6 mt-6 border-2 border-amber-300 ">
+      <div className="w-9/12 h-5/6 mt-6 ">
         <h1 className="text-3xl text-center font-semi-bold">Dashboard</h1>
-        <div className="w-11/12 h-5/6 mt-6 border-2 border-amber-600 mx-auto"> 
-          <div className="w-5/12 h-full float-left ml-14">
+        <div className="w-11/12 h-5/6 mt-6 mx-auto"> 
+          <div className="w-5/12 h-full md:float-left ml-14 sm:mr-10">
             <div className="bg-red-500 w-full h-3/6"></div> 
             <div className="bg-blue-500 w-full h-3/6 mt-14"></div>
           </div>
-          <div className="w-5/12 h-full float-right mr-14">
-            <div className="bg-blue-500 w-full h-3/6 "> 
+          <div className="w-5/12 h-full md:float-right mr-14">
+            <div className="bg-blue-500 w-full h-3/5 "> 
             </div> 
-            <div className="bg-red-500 w-full h-3/6 mt-14">
+            <div className="bg-red-500 w-full h-2/5 mt-14">
             </div>
           </div>
         </div>
