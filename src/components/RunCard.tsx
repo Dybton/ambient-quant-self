@@ -3,7 +3,6 @@ import CircularProgressBar from './ProgressBars/CircularProgressBar';
 
 interface Props {}
 
-
 const RunCard: React.FC<Props> = () => {
   return (
     <div className="shadow-lg w-full rounded-3xl h-3/6">
@@ -26,7 +25,7 @@ const RunCard: React.FC<Props> = () => {
           </div>
         </div>
         <div className='h-full w-3/6'>
-          <CircularProgressBar/>
+          <CircularProgressBar percentage={20}/>
         </div>
       </div>
     </div>
