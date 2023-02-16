@@ -2,24 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
+// Should probably take percentage as a prop
 function CircularProgressBar() {
-  const [percentage, setPercentage] = useState(0);
-
-  useEffect(() => {
-    setTimeout(() => {
-      if (percentage < 100) {
-        setPercentage(percentage + 1);
-      }
-    }, 50);
-  }, [percentage]);
+    const percentage = 20; 
 
   return (
-    <div style={{textAlign:"center"}}>
-      <h4>Circular progress bar in React </h4>
-      <div style={{ width: 150, marginLeft: 550}}>
-        <CircularProgressbar value={percentage} text={`${percentage}%`} />
-      </div>
-    </div>
+<div>
+<div className="w-32 mx-auto">
+    <CircularProgressbar value={percentage} text={`${percentage}%`} 
+      styles={{
+        path: { stroke: '#38393E' },
+        text: { fill: '#38393E', fontSize: '18px' },
+      }}
+    />
+  </div>
+</div>
   );
 }
+
+
 export default CircularProgressBar;
