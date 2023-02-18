@@ -1,7 +1,7 @@
 import React from 'react';
 import CircularProgressBar from './ProgressBars/CircularProgressBar';
 import CardHeader from './CardHeader';
-import Squares from './Icons/Squares';
+import Squares from './Icons/SquaresIcon';
 
 interface Props {}
 
