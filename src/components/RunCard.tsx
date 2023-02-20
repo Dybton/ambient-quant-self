@@ -8,7 +8,9 @@ interface Props {}
 const RunCard: React.FC<Props> = () => {
   return (
     <div className="shadow-lg w-full rounded-3xl h-3/6">
-      <CardHeader title={{ text: "KM Run", size: "text-2xl" }} icon={<Squares/>}/>
+      <div className='flex-row h-2/6'>
+        <CardHeader title={{ text: "KM Run", size: "text-2xl" }} icon={<Squares/>}/>
+      </div>
       <div className='flex h-4/6'>
         <div className='h-full w-3/6 flex flex-col'>
           <div className=' w-full h-3/6'>
