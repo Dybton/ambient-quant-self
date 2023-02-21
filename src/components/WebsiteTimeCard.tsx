@@ -18,34 +18,34 @@ const WebsiteTimeCard: React.FC<Props> = () => {
       </div>
       
       <div className='flex mt-4 flex-col'>
-        <div className='ml-8 mb-1 w-full'>
+        <div className='ml-8 mb-2 w-full'>
           <p className='font-bold text-3xl '> 80/160</p>
         </div>
         <div className='ml-8 h-1/5 w-full mb-3'>
-          <p className='font-light text-sm'> Facebook</p>
+          <p className='font-light'> Facebook</p>
           <div className='flex flex-row items-center mt-1'>
             <div className='mr-1 w-8'>
               <FacebookIcon/>
             </div>
-            <HorizontalProgressBar height={2} width={'4/6'} percentage={20}/>
+            <HorizontalProgressBar percentage={20}/>
           </div>
         </div>
         <div className='ml-8 h-1/5 w-full mb-3'>
-          <p className='font-light text-sm'> Twitter</p>
+          <p className='font-light '> Twitter</p>
           <div className='flex flex-row items-center mt-1'>
           <div className='mr-1 w-8'>
             <TwitterIcon/>
           </div>
-          <HorizontalProgressBar height={2} width={'4/6'} percentage={50}/>
+          <HorizontalProgressBar percentage={50}/>
           </div>
         </div>
         <div className='ml-8 h-1/5 w-full mb-3'>
-          <p className='font-light text-sm'> Linkedin</p>
+          <p className='font-light '> Linkedin</p>
           <div className='flex flex-row items-center mt-1'>
           <div className='mr-1 w-8'>
           <LinkedinIcon/>
           </div>
-          <HorizontalProgressBar height={2} width={'4/6'} percentage={50}/>
+          <HorizontalProgressBar percentage={50}/>
           </div>
         </div>
       </div>
