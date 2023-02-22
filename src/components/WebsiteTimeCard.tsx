@@ -27,7 +27,7 @@ const WebsiteTimeCard: React.FC<Props> = () => {
             <div className='mr-1 w-8'>
               <FacebookIcon/>
             </div>
-            <HorizontalProgressBar percentage={20}/>
+            <HorizontalProgressBar percentage={20} id={1}/>
           </div>
         </div>
         <div className='ml-8 h-1/5 w-full mb-3'>
@@ -36,7 +36,7 @@ const WebsiteTimeCard: React.FC<Props> = () => {
           <div className='mr-1 w-8'>
             <TwitterIcon/>
           </div>
-          <HorizontalProgressBar percentage={50}/>
+          <HorizontalProgressBar percentage={50} id={2}/>
           </div>
         </div>
         <div className='ml-8 h-1/5 w-full mb-3'>
@@ -45,7 +45,7 @@ const WebsiteTimeCard: React.FC<Props> = () => {
           <div className='mr-1 w-8'>
           <LinkedinIcon/>
           </div>
-          <HorizontalProgressBar percentage={50}/>
+          <HorizontalProgressBar percentage={50} id={3}/>
           </div>
         </div>
       </div>
