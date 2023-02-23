@@ -5,17 +5,16 @@ import { Tooltip as ReactTooltip } from "react-tooltip";
 interface HorizontalProgressBarProps {
   percentage: number;
   id?: number;
-  height?: number;
-  width?: number;
 }
+
 
 const HorizontalProgressBar: React.FC<HorizontalProgressBarProps> = (props) => {
   return (
     <>
     <div
-  className={`w-${props.width || '4/6'} bg-gray-200 rounded-full h-${props.height || '2'} dark:bg-gray-700`} id={props.id ? `tooltip-id-${props.id}` : ''} >
+  className="w-4/6 bg-gray-200 rounded-full h-2 dark:bg-gray-700" id={props.id ? `tooltip-id-${props.id}` : ''} >
       <div
-        className={`bg-blue-600 h-2 rounded-full`}
+        className="bg-blue-600 h-2 rounded-full"
         style={{ width: `${props.percentage}%` }}
       ></div>
     </div>
