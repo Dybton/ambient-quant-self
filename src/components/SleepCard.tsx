@@ -1,11 +1,12 @@
 import React from 'react';
 import CardHeader from './CardHeader';
 import SleepIcon from './Icons/SleepIcon';
-import HorizontalProgressBar from './ProgressBars/HorizontalProgressBar';
 import VerticalProgressBar from './ProgressBars/VerticalProgressBar';
 
 interface Props {}
 
+const days : String[] = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const sleepData = [20, 30, 40, 50, 60, 70, 80];
 
 const SleepCard: React.FC<Props> = () => {
   return (
@@ -13,31 +14,16 @@ const SleepCard: React.FC<Props> = () => {
       <div className='flex-row h-1/6 mb-8'>
         <CardHeader title={{ text: 'Sleep', size: 'text-2xl' }} icon={<SleepIcon/>}/>
       </div>
-      <div className="flex h-4/6 justify-between border-2">
-        <div className="border-2 flex-1 flex flex-col justify-end items-center">
-          <span>Mon</span>
-        </div>
-        <div className="border-2 flex-1 flex flex-col justify-end items-center">
-          <span>Tue</span>
-        </div>
-        <div className="border-2 flex-1 flex flex-col justify-end items-center">
-          <span>Wed</span>
-        </div>
-        <div className="border-2 flex-1 flex flex-col justify-end items-center">
-          <span>Thu</span>
-        </div>
-        <div className="border-2 flex-1 flex flex-col justify-end items-center">
-          <span>Fri</span>
-        </div>
-        <div className="border-2 flex-1 flex flex-col justify-end items-center">
-          <span>Sat</span>
-        </div>
-        <div className="border-2 flex-1 flex flex-col justify-end items-center">
-          <span>Sun</span>
-        </div>
+      <div className="flex h-4/6 justify-between ">
+        {days.map((day, index) => {
+          return (
+            <div className=" flex-1 flex flex-col justify-end items-center">
+              <VerticalProgressBar percentage={sleepData[index]} id={`v${index}`}/>
+              <span>{day}</span>
+            </div>
+          );
+        })}
       </div>
-
-
     </div>
   );
 };
