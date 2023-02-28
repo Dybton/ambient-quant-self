@@ -4,9 +4,12 @@ import { Tooltip as ReactTooltip } from "react-tooltip";
 
 interface VerticalProgressBarProps {
   percentage: number;
+  label?: string;
   id?: string;
 }
+
 const VerticalProgressBar: React.FC<VerticalProgressBarProps> = (props) => {
+
   return (
     <>
     <div
@@ -19,7 +22,7 @@ const VerticalProgressBar: React.FC<VerticalProgressBarProps> = (props) => {
     {props.id && <ReactTooltip
         anchorId={`tooltip-id-${props.id}`}
         place="top"
-        content={`${props.percentage}%`}
+        content={props.label}
       />}
     </>
   );
