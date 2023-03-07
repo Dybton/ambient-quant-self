@@ -13,6 +13,7 @@
     "apollo-server": "^3.10.3",
     "express": "^4.18.1",
     "graphql": "^16.6.0",
-    "oura": "^0.8.1"
+    "oura": "^0.8.1",
+    "oura-cloud-api": "^2.0.1"
   }
 }
