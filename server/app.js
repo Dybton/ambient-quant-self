@@ -17,6 +17,8 @@ const getActivity = () => client.activity(start, end).then(function (user) {
 console.error(error)
 })
 
+// Test
+
 const getIdealBedtime = () => client.idealBedtime(start, end).then(function (user) {
     return (JSON.stringify(user, null, 1))
 }).catch(function(error){
