@@ -15,5 +15,8 @@
     "graphql": "^16.6.0",
     "oura": "^0.8.1",
     "oura-cloud-api": "^2.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^18.14.6"
   }
 }
