@@ -1,4 +1,4 @@
-const { getMonday } = require("./utilities");
+
 const Client = require("oura-cloud-api");
 const accessToken = 'CWDIVW2X5NB4CPSFV73IEKMZBJUATRKW'
 
@@ -6,7 +6,6 @@ const accessToken = 'CWDIVW2X5NB4CPSFV73IEKMZBJUATRKW'
 const start = '2023-03-06';
 const end = '2023-03-12';
 
-console.log(getMonday(new Date()));
 
 (async () => {
     try {
@@ -15,8 +14,6 @@ console.log(getMonday(new Date()));
         const userInfo  = await client.GetPersonalInfo();
         const sleep = await client.getSleep({ start_date: start, end_date: end});
         const workout = await client.getWorkout({ start_date: start, end_date: end}); // register next run and see if it pops up
-
-        // console.log(sleep)
 
     } catch (error) {
         console.log(`Oh-no, error occured: ${error}`);
