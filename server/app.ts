@@ -1,4 +1,4 @@
-const Client = require("oura-cloud-api");
+import Client from "oura-cloud-api";
 const accessToken = 'CWDIVW2X5NB4CPSFV73IEKMZBJUATRKW'
 
 const today = new Date();
