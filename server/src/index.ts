@@ -1,15 +1,8 @@
 import Client from "oura-cloud-api";
 const accessToken = 'CWDIVW2X5NB4CPSFV73IEKMZBJUATRKW'
+import { convertSecondsToTime, getDays } from './utilities.js';
 
-const today = new Date();
-const lastMonday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - (today.getDay() + 6) % 7);
-const nextSunday = new Date(lastMonday.getFullYear(), lastMonday.getMonth(), lastMonday.getDate() + 6);
-
-const lastMondayString = lastMonday.toISOString().substring(0, 10);
-const nextSundayString = nextSunday.toISOString().substring(0, 10);
-
-const start = lastMondayString;
-const end = nextSundayString;
+const { start, end } = getDays();
 
 (async () => {
     try {
@@ -40,15 +33,5 @@ const end = nextSundayString;
 })();
 
 
-  const convertSecondsToTime = (seconds) => {
-    let hours = Math.floor(seconds / 3600);
-    let minutes = Math.floor((seconds % 3600) / 60);
-  
-    return {
-      hours,
-      minutes,
-    };
-  };
-  
   
 // module.exports = { getUserInfo, getActivity, getIdealBedtime, getSleep, getHeartRate, getReadiness};
