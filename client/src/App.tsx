@@ -1,4 +1,3 @@
-import React from 'react';
 import './App.css';
 import DeepWorkCard from './components/DeepWorkCard';
 import RunCard from './components/RunCard';

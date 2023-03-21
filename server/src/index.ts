@@ -2,6 +2,19 @@ import Client from "oura-cloud-api";
 const accessToken = 'CWDIVW2X5NB4CPSFV73IEKMZBJUATRKW' // todo: Place this in env file
 import { convertSecondsToTime, getDays } from './utilities.js';
 
+import { ApolloServer } from 'apollo-server';
+import { typeDefs } from './schema.js';
+import { resolvers } from './resolvers.js';
+
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+});
+
+server.listen().then(({ url }) => {
+  console.log(`🚀 Server ready at ${url}`);
+});
+
 const { start, end } = getDays();
 
 (async () => {
@@ -31,6 +44,7 @@ const { start, end } = getDays();
         console.log(`Oh-no, error occured: ${error}`);
     }
 })();
+
 
 
   
