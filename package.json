@@ -1,0 +1,15 @@
+{
+  "name": "amb-quant-self",
+  "version": "1.0.0",
+  "description": "https://fireship.io/lessons/typescript-nodejs-setup/ -- Ressource for working with ts/node",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"cd server && tsc && nodemon dist/index.js\" \"cd client && npm start\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  }
+}

@@ -1,5 +1,5 @@
 import Client from "oura-cloud-api";
-const accessToken = 'CWDIVW2X5NB4CPSFV73IEKMZBJUATRKW';
+const accessToken = 'CWDIVW2X5NB4CPSFV73IEKMZBJUATRKW'; // todo: Place this in env file
 import { convertSecondsToTime, getDays } from './utilities.js';
 const { start, end } = getDays();
 (async () => {
@@ -11,7 +11,7 @@ const { start, end } = getDays();
             const duration = convertSecondsToTime(day.total_sleep_duration);
             return { date, duration };
         });
-        console.log(sleepDuration);
+        console.log("sleepDuration", sleepDuration);
         const workout = await client.getWorkout({ start_date: start, end_date: end });
         let totalRunninDist = 0;
         workout.data.map((day) => {
@@ -20,7 +20,7 @@ const { start, end } = getDays();
             }
         });
         totalRunninDist = Math.ceil(totalRunninDist) / 1000;
-        console.log(totalRunninDist);
+        console.log("totalRunninDist", totalRunninDist);
     }
     catch (error) {
         console.log(`Oh-no, error occured: ${error}`);
