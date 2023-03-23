@@ -17,15 +17,16 @@ export const convertSecondsToTime = (seconds: number) => {
   };
 
 
-export const getDays = () => {
+  export const getDays = (): { start: string, end: string } => {
     const today = new Date();
     const lastMonday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - (today.getDay() + 6) % 7);
     const nextSunday = new Date(lastMonday.getFullYear(), lastMonday.getMonth(), lastMonday.getDate() + 6);
     const lastMondayString = lastMonday.toISOString().substring(0, 10);
     const nextSundayString = nextSunday.toISOString().substring(0, 10);
-
+  
     return {
       start: lastMondayString,
       end: nextSundayString
     };
-  }
+  };
+  
