@@ -7,14 +7,9 @@ interface SleepData {
   total_sleep_duration: number;
 }
 
-interface FetchSleepDataInput {
+interface SleepDataInput {
   start: string;
   end: string;
-}
-
-interface SleepDuration {
-  date: string;
-  duration: string;
 }
 
 interface WorkoutData {
@@ -27,13 +22,44 @@ interface FetchRunDataInput {
   end: string;
 }
 
+type SleepDurationData = {
+  date: string;
+  duration: {
+    hours: number;
+    minutes: number;
+  };
+};
+
 const { start, end } = getDays();
 const client = new Client(accessToken);
 
+const mergeSleepDuration = (sleepDuration: SleepDurationData[]): SleepDurationData[] => {
+  sleepDuration.sort((a, b) => a.date.localeCompare(b.date));
 
-type FetchRunDataOutput = number | null;
+  const mergedDuration: Record<string, {hours: number, minutes: number}> = {};
+  sleepDuration.forEach(data => {
+    const {date, duration} = data;
+    const existingDuration = mergedDuration[date];
+    if (existingDuration) {
+      existingDuration.hours += duration.hours;
+      existingDuration.minutes += duration.minutes;
+    } else {
+      mergedDuration[date] = {...duration};
+    }
+  });
 
-async function fetchRunData({ start, end }: FetchRunDataInput): Promise<FetchRunDataOutput> {
+  const result: SleepDurationData[] = [];
+  Object.entries(mergedDuration).forEach(([date, duration]) => {
+    let {hours, minutes} = duration;
+    hours += Math.floor(minutes / 60);
+    minutes = minutes % 60;
+    result.push({date, duration: {hours, minutes}});
+  });
+
+  return result;
+};
+
+async function fetchRunData({ start, end }: FetchRunDataInput): Promise<number | null> {
   try {
     const workout = await client.getWorkout({ start_date: start, end_date: end }); 
     const totalRunningDist = workout.data
@@ -47,9 +73,7 @@ async function fetchRunData({ start, end }: FetchRunDataInput): Promise<FetchRun
   }
 }
 
-type FetchSleepDataOutput = SleepDuration[] | null;
-
-async function fetchSleepData({ start, end }: FetchSleepDataInput): Promise<FetchSleepDataOutput> {
+async function fetchSleepData({ start, end }: SleepDataInput): Promise<SleepDurationData[] | null> {
   try {
     const sleep = await client.getSleep({ start_date: start, end_date: end });
     const sleepDuration = sleep.data.map((day: SleepData) => {
@@ -58,7 +82,9 @@ async function fetchSleepData({ start, end }: FetchSleepDataInput): Promise<Fetc
       return { date, duration };
     });
 
-    return sleepDuration;
+    const mergedSleepDuration = mergeSleepDuration(sleepDuration);
+
+    return mergedSleepDuration;
   } catch (error) {
     console.error('Error fetching sleep data:', error);
     return null;

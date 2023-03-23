@@ -9,6 +9,29 @@ const accessToken = 'CWDIVW2X5NB4CPSFV73IEKMZBJUATRKW'; // todo: Place this in e
 const utilities_js_1 = require("./utilities.js");
 const { start, end } = (0, utilities_js_1.getDays)();
 const client = new oura_cloud_api_1.default(accessToken);
+const mergeSleepDuration = (sleepDuration) => {
+    sleepDuration.sort((a, b) => a.date.localeCompare(b.date));
+    const mergedDuration = {};
+    sleepDuration.forEach(data => {
+        const { date, duration } = data;
+        const existingDuration = mergedDuration[date];
+        if (existingDuration) {
+            existingDuration.hours += duration.hours;
+            existingDuration.minutes += duration.minutes;
+        }
+        else {
+            mergedDuration[date] = { ...duration };
+        }
+    });
+    const result = [];
+    Object.entries(mergedDuration).forEach(([date, duration]) => {
+        let { hours, minutes } = duration;
+        hours += Math.floor(minutes / 60);
+        minutes = minutes % 60;
+        result.push({ date, duration: { hours, minutes } });
+    });
+    return result;
+};
 async function fetchRunData({ start, end }) {
     try {
         const workout = await client.getWorkout({ start_date: start, end_date: end });
@@ -30,7 +53,8 @@ async function fetchSleepData({ start, end }) {
             const duration = (0, utilities_js_1.convertSecondsToTime)(day.total_sleep_duration);
             return { date, duration };
         });
-        return sleepDuration;
+        const mergedSleepDuration = mergeSleepDuration(sleepDuration);
+        return mergedSleepDuration;
     }
     catch (error) {
         console.error('Error fetching sleep data:', error);
