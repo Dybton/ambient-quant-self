@@ -94,6 +94,11 @@ async function fetchSleepData({ start, end }: SleepDataInput): Promise<SleepDura
 export const resolvers = {
   Query: {
     sleepDuration: async () => await fetchSleepData({ start, end }),
+
+    runDistance: async () => {
+      const distance = await fetchRunData({ start, end });
+      return { distance };
+    },
     },
   };
   

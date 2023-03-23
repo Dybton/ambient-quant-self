@@ -11,7 +11,12 @@ export const typeDefs = gql`
     minutes: Int!
   }
 
+  type RunDistance {
+    distance: Float
+  }
+
   type Query {
     sleepDuration: [SleepDuration!]!
+    runDistance: RunDistance!
   }
 `;

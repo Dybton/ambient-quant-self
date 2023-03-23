@@ -13,8 +13,13 @@ exports.typeDefs = (0, apollo_server_1.gql) `
     minutes: Int!
   }
 
+  type RunDistance {
+    distance: Float
+  }
+
   type Query {
     sleepDuration: [SleepDuration!]!
+    runDistance: RunDistance!
   }
 `;
 //# sourceMappingURL=schema.js.map
