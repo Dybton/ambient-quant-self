@@ -3,8 +3,8 @@ import { SleepData } from '../Types/Types';
 import CardHeader from './CardHeader';
 import SleepIcon from './Icons/SleepIcon';
 import VerticalProgressBar from './ProgressBars/VerticalProgressBar';
-
-const sleepData : SleepData[] = [{day: 'Mon', hours: 6, minutes: 22}, {day: 'Tue', hours: 6, minutes: 11}, {day: 'Wed', hours: 6, minutes: 11}, {day: 'Thu', hours: 6, minutes: 11}, {day: 'Fri', hours: 6, minutes: 11}, {day: 'Sat', hours: 2, minutes: 11}, {day: 'Sun', hours: 6, minutes: 11}];
+import { gql } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 
 const calculateSleepPercentage = (hours: number, minutes: number) => {
   const totalMinutes = hours * 60 + minutes;
@@ -13,7 +13,29 @@ const calculateSleepPercentage = (hours: number, minutes: number) => {
   return percentage;
 }
 
+const SLEEP_DURATION_QUERY = gql`
+  query {
+    sleepDuration {
+      date
+      duration {
+        hours
+        minutes
+      }
+    }
+  }
+`;
+const sleepData : SleepData[] = [{day: 'Mon', hours: 6, minutes: 22}, {day: 'Tue', hours: 6, minutes: 11}, {day: 'Wed', hours: 6, minutes: 11}, {day: 'Thu', hours: 6, minutes: 11}, {day: 'Fri', hours: 6, minutes: 11}, {day: 'Sat', hours: 2, minutes: 11}, {day: 'Sun', hours: 6, minutes: 11}];
+
 const SleepCard: React.FC = () => {
+  // const { loading, error, data } = useQuery(SLEEP_DURATION_QUERY);
+
+  // if (loading) return <p>Loading...</p>;
+  // if (error) return <p>Error: {error.message}</p>;
+
+  // const { sleepDuration } = data;
+
+  // console.log(sleepDuration);
+
   return (
     <div className="shadow-lg w-full rounded-3xl h-3/6 mt-14 flex-row  divide-y-[2px]">
       <div className='flex-row h-1/6 mb-8'>

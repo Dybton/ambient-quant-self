@@ -2,10 +2,28 @@ import React from 'react';
 import CircularProgressBar from './ProgressBars/CircularProgressBar';
 import CardHeader from './CardHeader';
 import Squares from './Icons/SquaresIcon';
+import { gql } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 
-interface Props {}
+export const RUN_DISTANCE_QUERY = gql`
+  query {
+    runDistance {
+      distance
+    }
+  }
+`;
 
-const RunCard: React.FC<Props> = () => {
+
+const RunCard: React.FC = () => {
+  // const { loading, error, data } = useQuery(RUN_DISTANCE_QUERY);
+
+  // if (loading) return <p>Loading...</p>;
+  // if (error) return <p>Error: {error.message}</p>;
+
+  // const { runDistance } = data;
+
+  // console.log(runDistance);
+
   return (
     <div className="shadow-lg w-full rounded-3xl h-3/6">
       <div className='flex-row h-2/6'>

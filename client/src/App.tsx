@@ -4,8 +4,7 @@ import RunCard from './components/RunCard';
 import SleepCard from './components/SleepCard';
 import WebsiteTimeCard from './components/WebsiteTimeCard';
 
-
-function App() {
+const App = () => {
   return (
     <div className="flex h-screen w-screen justify-center items-center" >
       <div className="w-9/12 h-5/6 ">
