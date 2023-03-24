@@ -24,27 +24,26 @@ const mergeSleepDuration = (sleepDuration) => {
         }
     });
     const result = [];
-    Object.entries(mergedDuration).forEach(([date, duration]) => {
-        let { hours, minutes } = duration;
-        hours += Math.floor(minutes / 60);
-        minutes = minutes % 60;
-        result.push({ date, duration: { hours, minutes } });
+    const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    daysOfWeek.forEach(dayOfWeek => {
+        const date = Object.keys(mergedDuration).find(date => {
+            const day = new Date(date).toLocaleString('da-DK', { weekday: 'short' }).toLowerCase();
+            return day === dayOfWeek;
+        });
+        if (date) {
+            const duration = mergedDuration[date];
+            let { hours, minutes } = duration;
+            hours += Math.floor(minutes / 60);
+            minutes = minutes % 60;
+            const day = new Date(date).toLocaleString('en-US', { weekday: 'short' });
+            result.push({ date, day, duration: { hours, minutes } });
+        }
+        else {
+            result.push({ date: '', day: dayOfWeek, duration: { hours: 0, minutes: 0 } });
+        }
     });
     return result;
 };
-async function fetchRunData({ start, end }) {
-    try {
-        const workout = await client.getWorkout({ start_date: start, end_date: end });
-        const totalRunningDist = workout.data
-            .filter((day) => day.activity === 'running')
-            .reduce((total, day) => total + day.distance, 0);
-        return Math.ceil(totalRunningDist) / 1000;
-    }
-    catch (error) {
-        console.error('Error fetching running data:', error);
-        return null;
-    }
-}
 async function fetchSleepData({ start, end }) {
     try {
         const sleep = await client.getSleep({ start_date: start, end_date: end });
@@ -58,6 +57,19 @@ async function fetchSleepData({ start, end }) {
     }
     catch (error) {
         console.error('Error fetching sleep data:', error);
+        return null;
+    }
+}
+async function fetchRunData({ start, end }) {
+    try {
+        const workout = await client.getWorkout({ start_date: start, end_date: end });
+        const totalRunningDist = workout.data
+            .filter((day) => day.activity === 'running')
+            .reduce((total, day) => total + day.distance, 0);
+        return Number((Math.ceil(totalRunningDist) / 1000).toFixed(1));
+    }
+    catch (error) {
+        console.error('Error fetching running data:', error);
         return null;
     }
 }

@@ -2,6 +2,7 @@ import { gql } from 'apollo-server';
 
 export const typeDefs = gql`
   type SleepDuration {
+    day: String!
     date: String!
     duration: SleepDurationValue!
   }

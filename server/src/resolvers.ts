@@ -24,6 +24,7 @@ interface FetchRunDataInput {
 
 type SleepDurationData = {
   date: string;
+  day: string;
   duration: {
     hours: number;
     minutes: number;
@@ -53,25 +54,15 @@ const mergeSleepDuration = (sleepDuration: SleepDurationData[]): SleepDurationDa
     let {hours, minutes} = duration;
     hours += Math.floor(minutes / 60);
     minutes = minutes % 60;
-    result.push({date, duration: {hours, minutes}});
+
+    const day = new Date(date).toLocaleString('en-US', { weekday: 'short' });
+    
+    result.push({date, day, duration: {hours, minutes}});
   });
 
   return result;
 };
 
-async function fetchRunData({ start, end }: FetchRunDataInput): Promise<number | null> {
-  try {
-    const workout = await client.getWorkout({ start_date: start, end_date: end }); 
-    const totalRunningDist = workout.data
-      .filter((day: WorkoutData) => day.activity === 'running')
-      .reduce((total: number, day: WorkoutData) => total + day.distance, 0);
-    
-    return Math.ceil(totalRunningDist) / 1000;
-  } catch (error) {
-    console.error('Error fetching running data:', error);
-    return null;
-  }
-}
 
 async function fetchSleepData({ start, end }: SleepDataInput): Promise<SleepDurationData[] | null> {
   try {
@@ -87,6 +78,20 @@ async function fetchSleepData({ start, end }: SleepDataInput): Promise<SleepDura
     return mergedSleepDuration;
   } catch (error) {
     console.error('Error fetching sleep data:', error);
+    return null;
+  }
+}
+
+async function fetchRunData({ start, end }: FetchRunDataInput): Promise<number | null> {
+  try {
+    const workout = await client.getWorkout({ start_date: start, end_date: end }); 
+    const totalRunningDist = workout.data
+      .filter((day: WorkoutData) => day.activity === 'running')
+      .reduce((total: number, day: WorkoutData) => total + day.distance, 0);
+    
+    return Number((Math.ceil(totalRunningDist) / 1000).toFixed(1));
+  } catch (error) {
+    console.error('Error fetching running data:', error);
     return null;
   }
 }
