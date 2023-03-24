@@ -1,6 +1,7 @@
 import Client from "oura-cloud-api";
 const accessToken = 'CWDIVW2X5NB4CPSFV73IEKMZBJUATRKW' // todo: Place this in env file
-import { convertSecondsToTime, getDays } from './utilities.js';
+process.env.TZ = 'Europe/Copenhagen';
+import { convertSecondsToTime, getDays, getDateFromWeekDay} from './utilities.js';
 
 interface SleepData {
   day: string;
@@ -65,6 +66,22 @@ const mergeSleepDuration = (sleepDuration: SleepDurationData[]): SleepDurationDa
 
 
 async function fetchSleepData({ start, end }: SleepDataInput): Promise<SleepDurationData[] | null> {
+  
+    const daysOfTheWeek2 = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']; // create type for this
+    const arr = [];
+  
+    daysOfTheWeek2.forEach(day => {
+      const sleepObj : SleepDurationData = {
+        date: getDateFromWeekDay(day),
+        day: day,
+        duration: { hours: 0, minutes: 0 }
+      }
+      arr.push(sleepObj)
+    })
+
+  console.log(arr)
+
+
   try {
     const sleep = await client.getSleep({ start_date: start, end_date: end });
     const sleepDuration = sleep.data.map((day: SleepData) => {
@@ -72,6 +89,22 @@ async function fetchSleepData({ start, end }: SleepDataInput): Promise<SleepDura
       const duration = convertSecondsToTime(day.total_sleep_duration);
       return { date, duration };
     });
+
+    // Usage
+  try {
+    console.log("Monday", getDateFromWeekDay("Monday"));
+    // console.log("Tuesday", getWeekDayDate("Tuesday"));
+    // console.log("Wednesday", getWeekdayDate("Wednesday"));
+    // console.log("Thursday", getWeekdayDate("Thursday"));
+    // console.log("Friday", getWeekdayDate("Friday"));
+    // console.log("Saturday", getWeekdayDate("Saturday"));
+    // console.log("Sunday", getWeekdayDate("Sunday"));
+
+  } catch (error) {
+    console.error(error.message);
+  }
+
+    
 
     const mergedSleepDuration = mergeSleepDuration(sleepDuration);
 
