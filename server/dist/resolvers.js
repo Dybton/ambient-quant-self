@@ -35,7 +35,6 @@ const mergeSleepDuration = (sleepDuration) => {
 async function fetchRunData({ start, end }) {
     try {
         const workout = await client.getWorkout({ start_date: start, end_date: end });
-        console.log(workout.data);
         const totalRunningDist = workout.data
             .filter((day) => day.activity === 'running')
             .reduce((total, day) => total + day.distance, 0);
@@ -55,8 +54,6 @@ async function fetchSleepData({ start, end }) {
             return { date, duration };
         });
         const mergedSleepDuration = mergeSleepDuration(sleepDuration);
-        const leaasasd = await fetchRunData({ start, end });
-        console.log("testooo", leaasasd);
         return mergedSleepDuration;
     }
     catch (error) {
