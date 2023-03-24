@@ -13,16 +13,19 @@ export const RUN_DISTANCE_QUERY = gql`
   }
 `;
 
-
 const RunCard: React.FC = () => {
-  // const { loading, error, data } = useQuery(RUN_DISTANCE_QUERY);
+  const { loading, error, data } = useQuery(RUN_DISTANCE_QUERY);
 
-  // if (loading) return <p>Loading...</p>;
-  // if (error) return <p>Error: {error.message}</p>;
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
-  // const { runDistance } = data;
+  const { runDistance } = data;
 
-  // console.log(runDistance);
+  const weeklyRunGoal = 30;
+  const monthlyGoal = weeklyRunGoal * 4;
+
+  const weeklyPercentage = Number((runDistance.distance / weeklyRunGoal * 100).toFixed(1));
+  const monthlyPercentage = Number((runDistance.distance / monthlyGoal * 100).toFixed(1));
 
   return (
     <div className="shadow-lg w-full rounded-3xl h-3/6">
@@ -30,17 +33,22 @@ const RunCard: React.FC = () => {
         <CardHeader title={{ text: "KM Run", size: "text-2xl" }} icon={<Squares/>}/>
       </div>
       <div className='flex h-4/6'>
-        <div className='h-full w-3/6 flex flex-col'>
-          <div className=' w-full h-3/6'>
-            <p className='font-bold text-5xl ml-8'> 6/30</p>
+      <div className='h-full w-3/6 flex flex-col'>
+        <div className='w-full h-3/6 flex items-center'>
+          <p className='font-bold text-5xl ml-8'> {runDistance.distance}/{weeklyRunGoal}</p>
+        </div>
+        <div className='w-full h-3/6 flex flex-col justify-center'>
+          <div className='flex items-center ml-8'>
+            <p className='font-light'><span className='font-semibold'>{weeklyPercentage}%</span> Weekly goal</p>
           </div>
-          <div className=' w-full h-3/6'>
-            <p className=' ml-8 font-light'> <span className='font-semibold'>20%</span>   Weekly goal</p>
-            <p className=' ml-8 font-light'> <span className='font-semibold'>7.2%</span>   Monthly goal</p>
+          <div className='flex items-center ml-8'>
+            <p className='font-light'><span className='font-semibold'>{monthlyPercentage}%</span> Monthly goal</p>
           </div>
         </div>
+      </div>
+
         <div className='h-full w-3/6'>
-          <CircularProgressBar percentage={20}/>
+          <CircularProgressBar percentage={weeklyPercentage}/>
         </div>
       </div>
     </div>

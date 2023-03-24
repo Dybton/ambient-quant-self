@@ -17,6 +17,7 @@ const SLEEP_DURATION_QUERY = gql`
   query {
     sleepDuration {
       date
+      day
       duration {
         hours
         minutes
@@ -27,14 +28,15 @@ const SLEEP_DURATION_QUERY = gql`
 const sleepData : SleepData[] = [{day: 'Mon', hours: 6, minutes: 22}, {day: 'Tue', hours: 6, minutes: 11}, {day: 'Wed', hours: 6, minutes: 11}, {day: 'Thu', hours: 6, minutes: 11}, {day: 'Fri', hours: 6, minutes: 11}, {day: 'Sat', hours: 2, minutes: 11}, {day: 'Sun', hours: 6, minutes: 11}];
 
 const SleepCard: React.FC = () => {
-  // const { loading, error, data } = useQuery(SLEEP_DURATION_QUERY);
+  const { loading, error, data } = useQuery(SLEEP_DURATION_QUERY);
 
-  // if (loading) return <p>Loading...</p>;
-  // if (error) return <p>Error: {error.message}</p>;
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+  
+  const { sleepDuration } = data;
 
-  // const { sleepDuration } = data;
-
-  // console.log(sleepDuration);
+  console.log(sleepDuration);
+  console.log(sleepData);
 
   return (
     <div className="shadow-lg w-full rounded-3xl h-3/6 mt-14 flex-row  divide-y-[2px]">
