@@ -36,35 +36,6 @@ type SleepDurationData = {
 const { start, end } = getDays();
 const client = new Client(accessToken);
 
-const mergeSleepDuration = (sleepDuration: SleepDurationData[]): SleepDurationData[] => {
-  sleepDuration.sort((a, b) => a.date.localeCompare(b.date));
-
-  const mergedDuration: Record<string, {hours: number, minutes: number}> = {};
-  sleepDuration.forEach(data => {
-    const {date, duration} = data;
-    const existingDuration = mergedDuration[date];
-    if (existingDuration) {
-      existingDuration.hours += duration.hours;
-      existingDuration.minutes += duration.minutes;
-    } else {
-      mergedDuration[date] = {...duration};
-    }
-  });
-
-  const result: SleepDurationData[] = [];
-  Object.entries(mergedDuration).forEach(([date, duration]) => {
-    let {hours, minutes} = duration;
-    hours += Math.floor(minutes / 60);
-    minutes = minutes % 60;
-
-    const day = new Date(date).toLocaleString('en-US', { weekday: 'short' });
-    
-    result.push({date, day, duration: {hours, minutes}});
-  });
-
-  return result;
-};
-
 
 // Still used
 export const reduceSleepData = (data): SleepData[] => {
