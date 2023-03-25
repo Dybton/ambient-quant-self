@@ -65,7 +65,7 @@ const mergeSleepDuration = (sleepDuration: SleepDurationData[]): SleepDurationDa
 };
 
 
-export const mergeSleepData = (data): SleepData[] => {
+export const reduceSleepData = (data): SleepData[] => {
   const sleepDataMap = new Map<string, SleepData>();
 
   for (const rawData of data) {
@@ -104,7 +104,7 @@ async function fetchSleepData({ start, end }: SleepDataInput): Promise<SleepDura
 
   try {
     const sleep = await client.getSleep({ start_date: start, end_date: end });
-    console.log(sleep.data)
+    const testData1 = reduceSleepData(sleep.data)
     
     sleep.data.map((night: SleepData) => {
       night.day

@@ -1,6 +1,6 @@
-import { mergeSleepData} from './resolvers';
+import { reduceSleepData} from './resolvers';
 
-describe('mergeSleepData', () => {
+describe('reduceSleepData', () => {
     it('merges the total sleep duration for duplicate days', () => {
       const rawData = [
         {
@@ -34,7 +34,7 @@ describe('mergeSleepData', () => {
         },
       ];
   
-      const result = mergeSleepData(rawData);
+      const result = reduceSleepData(rawData);
   
       expect(result).toEqual(expectedSleepData);
     });
