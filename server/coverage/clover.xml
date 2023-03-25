@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1679738635191" clover="3.2.0">
-  <project timestamp="1679738635191" name="All files">
-    <metrics statements="198" coveredstatements="102" conditionals="8" coveredconditionals="7" methods="9" coveredmethods="3" elements="215" coveredelements="112" complexity="0" loc="198" ncloc="198" packages="1" files="2" classes="2"/>
+<coverage generated="1679739333247" clover="3.2.0">
+  <project timestamp="1679739333247" name="All files">
+    <metrics statements="197" coveredstatements="102" conditionals="8" coveredconditionals="7" methods="9" coveredmethods="3" elements="214" coveredelements="112" complexity="0" loc="197" ncloc="197" packages="1" files="2" classes="2"/>
     <file name="resolvers.ts" path="/Users/jakobtolstrup/Desktop/Projects/amb-quant-self/server/src/resolvers.ts">
-      <metrics statements="154" coveredstatements="68" conditionals="4" coveredconditionals="4" methods="6" coveredmethods="1"/>
+      <metrics statements="153" coveredstatements="68" conditionals="4" coveredconditionals="4" methods="6" coveredmethods="1"/>
       <line num="1" count="1" type="stmt"/>
       <line num="2" count="1" type="stmt"/>
       <line num="3" count="1" type="stmt"/>
@@ -132,8 +132,8 @@
       <line num="126" count="0" type="stmt"/>
       <line num="127" count="0" type="stmt"/>
       <line num="128" count="0" type="stmt"/>
-      <line num="129" count="0" type="stmt"/>
-      <line num="130" count="1" type="stmt"/>
+      <line num="129" count="1" type="stmt"/>
+      <line num="130" count="0" type="stmt"/>
       <line num="131" count="0" type="stmt"/>
       <line num="132" count="0" type="stmt"/>
       <line num="133" count="0" type="stmt"/>
@@ -146,18 +146,17 @@
       <line num="140" count="0" type="stmt"/>
       <line num="141" count="0" type="stmt"/>
       <line num="142" count="0" type="stmt"/>
-      <line num="143" count="0" type="stmt"/>
+      <line num="143" count="1" type="stmt"/>
       <line num="144" count="1" type="stmt"/>
       <line num="145" count="1" type="stmt"/>
       <line num="146" count="1" type="stmt"/>
       <line num="147" count="1" type="stmt"/>
       <line num="148" count="1" type="stmt"/>
-      <line num="149" count="1" type="stmt"/>
+      <line num="149" count="0" type="stmt"/>
       <line num="150" count="0" type="stmt"/>
-      <line num="151" count="0" type="stmt"/>
+      <line num="151" count="1" type="stmt"/>
       <line num="152" count="1" type="stmt"/>
       <line num="153" count="1" type="stmt"/>
-      <line num="154" count="1" type="stmt"/>
     </file>
     <file name="utilities.ts" path="/Users/jakobtolstrup/Desktop/Projects/amb-quant-self/server/src/utilities.ts">
       <metrics statements="44" coveredstatements="34" conditionals="4" coveredconditionals="3" methods="3" coveredmethods="2"/>

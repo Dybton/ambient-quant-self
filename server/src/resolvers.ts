@@ -99,12 +99,11 @@ async function fetchSleepData({ start, end }: SleepDataInput): Promise<SleepDura
 
     console.log(sleepDurationArray)
 
-  
-  
 
   try {
     const sleep = await client.getSleep({ start_date: start, end_date: end });
     const testData1 = reduceSleepData(sleep.data)
+    console.log("testData1", testData1)
     
     sleep.data.map((night: SleepData) => {
       night.day
