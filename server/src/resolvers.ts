@@ -65,26 +65,53 @@ const mergeSleepDuration = (sleepDuration: SleepDurationData[]): SleepDurationDa
 };
 
 
+export const mergeSleepData = (data): SleepData[] => {
+  const sleepDataMap = new Map<string, SleepData>();
+
+  for (const rawData of data) {
+    const { day, total_sleep_duration } = rawData;
+
+    if (!sleepDataMap.has(day)) {
+      sleepDataMap.set(day, { day, total_sleep_duration });
+    } else {
+      const existingData = sleepDataMap.get(day)!;
+      existingData.total_sleep_duration += total_sleep_duration;
+      sleepDataMap.set(day, existingData);
+    }
+  }
+  return Array.from(sleepDataMap.values());
+};
 async function fetchSleepData({ start, end }: SleepDataInput): Promise<SleepDurationData[] | null> {
   
     const daysOfTheWeek2 = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']; // create type for this
-    const arr = [];
+    const sleepDurationArray = [];
   
-    daysOfTheWeek2.forEach(day => {
+    daysOfTheWeek2.map(day => {
       const sleepObj : SleepDurationData = {
         date: getDateFromWeekDay(day),
         day: day,
         duration: { hours: 0, minutes: 0 }
       }
-      arr.push(sleepObj)
+      sleepDurationArray.push(sleepObj)
     })
 
-  console.log(arr)
+    console.log(sleepDurationArray)
+
+  
 
 
   try {
     const sleep = await client.getSleep({ start_date: start, end_date: end });
+    console.log(sleep.data)
+    
+    sleep.data.map((night: SleepData) => {
+      night.day
+      console.log(night.day)
+    })
+    // Cont from here: Use the sleepDurationArray to merge the data from the API
+    
     const sleepDuration = sleep.data.map((day: SleepData) => {
+      // Here we need to run the mergesSleepDuration function, such that we catch it while we construct the array
       const date = day.day;
       const duration = convertSecondsToTime(day.total_sleep_duration);
       return { date, duration };
