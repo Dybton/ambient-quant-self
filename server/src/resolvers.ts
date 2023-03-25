@@ -1,7 +1,7 @@
 import Client from "oura-cloud-api";
 const accessToken = 'CWDIVW2X5NB4CPSFV73IEKMZBJUATRKW' // todo: Place this in env file
 process.env.TZ = 'Europe/Copenhagen';
-import { convertSecondsToTime, getDays, getDateFromWeekDay} from './utilities';
+import { getDays, getDateFromWeekDay} from './utilities';
 
 // This is for the raw data from the API
 interface SleepData {
