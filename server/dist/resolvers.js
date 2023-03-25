@@ -10,30 +10,6 @@ process.env.TZ = 'Europe/Copenhagen';
 const utilities_1 = require("./utilities");
 const { start, end } = (0, utilities_1.getDays)();
 const client = new oura_cloud_api_1.default(accessToken);
-const mergeSleepDuration = (sleepDuration) => {
-    sleepDuration.sort((a, b) => a.date.localeCompare(b.date));
-    const mergedDuration = {};
-    sleepDuration.forEach(data => {
-        const { date, duration } = data;
-        const existingDuration = mergedDuration[date];
-        if (existingDuration) {
-            existingDuration.hours += duration.hours;
-            existingDuration.minutes += duration.minutes;
-        }
-        else {
-            mergedDuration[date] = { ...duration };
-        }
-    });
-    const result = [];
-    Object.entries(mergedDuration).forEach(([date, duration]) => {
-        let { hours, minutes } = duration;
-        hours += Math.floor(minutes / 60);
-        minutes = minutes % 60;
-        const day = new Date(date).toLocaleString('en-US', { weekday: 'short' });
-        result.push({ date, day, duration: { hours, minutes } });
-    });
-    return result;
-};
 // Still used
 const reduceSleepData = (data) => {
     const sleepDataMap = new Map();
@@ -83,18 +59,8 @@ async function fetchSleepData({ start, end }) {
     try {
         const sleep = await client.getSleep({ start_date: start, end_date: end });
         const reducedSleepData = (0, exports.reduceSleepData)(sleep.data);
-        console.log("reducedSleepData", reducedSleepData);
-        console.log("sleepDurationArray", sleepDurationArray);
         const finalSleepData = mergeSleepData(reducedSleepData, sleepDurationArray);
-        console.log("finalSleepData", finalSleepData);
-        const sleepDuration = sleep.data.map((day) => {
-            // Here we need to run the mergesSleepDuration function, such that we catch it while we construct the array
-            const date = day.day;
-            const duration = (0, utilities_1.convertSecondsToTime)(day.total_sleep_duration);
-            return { date, duration };
-        });
-        const mergedSleepDuration = mergeSleepDuration(sleepDuration);
-        return mergedSleepDuration;
+        return finalSleepData;
     }
     catch (error) {
         console.error('Error fetching sleep data:', error);

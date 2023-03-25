@@ -1,5 +1,4 @@
 import React from 'react';
-import { SleepData } from '../Types/Types';
 import CardHeader from './CardHeader';
 import SleepIcon from './Icons/SleepIcon';
 import VerticalProgressBar from './ProgressBars/VerticalProgressBar';
@@ -25,7 +24,6 @@ const SLEEP_DURATION_QUERY = gql`
     }
   }
 `;
-const sleepData : SleepData[] = [{day: 'Mon', hours: 6, minutes: 22}, {day: 'Tue', hours: 6, minutes: 11}, {day: 'Wed', hours: 6, minutes: 11}, {day: 'Thu', hours: 6, minutes: 11}, {day: 'Fri', hours: 6, minutes: 11}, {day: 'Sat', hours: 2, minutes: 11}, {day: 'Sun', hours: 6, minutes: 11}];
 
 const SleepCard: React.FC = () => {
   const { loading, error, data } = useQuery(SLEEP_DURATION_QUERY);
@@ -53,6 +51,7 @@ const SleepCard: React.FC = () => {
 
           const sleepPercentage = calculateSleepPercentage(hours, minutes);
           const sleepTime = `${hours}h ${minutes}m`;
+          
           return (
             <div className=" flex-1 flex flex-col justify-end items-center">
               <VerticalProgressBar label={sleepTime} percentage={sleepPercentage} id={`v${dayName}`}/>
