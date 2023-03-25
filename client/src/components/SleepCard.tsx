@@ -50,7 +50,7 @@ const SleepCard: React.FC = () => {
           const dayName = day.day;
 
           const sleepPercentage = calculateSleepPercentage(hours, minutes);
-          const sleepTime = `${hours}h ${minutes}m`;
+          const sleepTime = hours ? `${hours}h ${minutes}m` : "No data"
           
           return (
             <div className=" flex-1 flex flex-col justify-end items-center">
