@@ -1,11 +1,3 @@
-export const getMonday = (d: Date) => {
-    d = new Date(d);
-    var day = d.getDay(),
-        diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
-    return new Date(d.setDate(diff));
-}
-
-
 export const convertSecondsToTime = (seconds: number) => {
     let hours = Math.floor(seconds / 3600);
     let minutes = Math.floor((seconds % 3600) / 60);
