@@ -33,11 +33,11 @@ type SleepDurationData = {
   };
 };
 
+type DayOfWeekString = 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat' | 'Sun';
+
 const { start, end } = getDays();
 const client = new Client(accessToken);
 
-
-// Still used
 export const reduceSleepData = (data): SleepData[] => {
   const sleepDataMap = new Map<string, SleepData>();
 
@@ -79,7 +79,7 @@ export function mergeSleepData(sleepDataArray: SleepData[], sleepDurationDataArr
 
 async function fetchSleepData({ start, end }: SleepDataInput): Promise<SleepDurationData[] | null> {
   
-    const daysOfTheWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']; // create type for this
+    const daysOfTheWeek : DayOfWeekString[] = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     const sleepDurationArray = [];
   
     daysOfTheWeek.map(day => {
@@ -94,10 +94,9 @@ async function fetchSleepData({ start, end }: SleepDataInput): Promise<SleepDura
   try {
     const sleep = await client.getSleep({ start_date: start, end_date: end });
     const reducedSleepData = reduceSleepData(sleep.data)
-    
-    const finalSleepData = mergeSleepData(reducedSleepData, sleepDurationArray)
+    const mergedSleepData = mergeSleepData(reducedSleepData, sleepDurationArray)
 
-    return finalSleepData;
+    return mergedSleepData;
 
   } catch (error) {
     console.error('Error fetching sleep data:', error);
@@ -122,7 +121,6 @@ async function fetchRunData({ start, end }: FetchRunDataInput): Promise<number |
 export const resolvers = {
   Query: {
     sleepDuration: async () => await fetchSleepData({ start, end }),
-
     runDistance: async () => {
       const distance = await fetchRunData({ start, end });
       return { distance };

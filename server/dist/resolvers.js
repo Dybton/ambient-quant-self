@@ -10,7 +10,6 @@ process.env.TZ = 'Europe/Copenhagen';
 const utilities_1 = require("./utilities");
 const { start, end } = (0, utilities_1.getDays)();
 const client = new oura_cloud_api_1.default(accessToken);
-// Still used
 const reduceSleepData = (data) => {
     const sleepDataMap = new Map();
     for (const rawData of data) {
@@ -46,7 +45,7 @@ function mergeSleepData(sleepDataArray, sleepDurationDataArray) {
 }
 exports.mergeSleepData = mergeSleepData;
 async function fetchSleepData({ start, end }) {
-    const daysOfTheWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']; // create type for this
+    const daysOfTheWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     const sleepDurationArray = [];
     daysOfTheWeek.map(day => {
         const sleepObj = {
@@ -59,8 +58,8 @@ async function fetchSleepData({ start, end }) {
     try {
         const sleep = await client.getSleep({ start_date: start, end_date: end });
         const reducedSleepData = (0, exports.reduceSleepData)(sleep.data);
-        const finalSleepData = mergeSleepData(reducedSleepData, sleepDurationArray);
-        return finalSleepData;
+        const mergedSleepData = mergeSleepData(reducedSleepData, sleepDurationArray);
+        return mergedSleepData;
     }
     catch (error) {
         console.error('Error fetching sleep data:', error);
