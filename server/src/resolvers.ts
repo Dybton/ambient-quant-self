@@ -3,6 +3,7 @@ const accessToken = 'CWDIVW2X5NB4CPSFV73IEKMZBJUATRKW' // todo: Place this in en
 process.env.TZ = 'Europe/Copenhagen';
 import { getDays, getDateFromWeekDay} from './utilities';
 
+
 // This is for the raw data from the API
 interface SleepData {
   day: string;
@@ -38,7 +39,7 @@ type DayOfWeekString = 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat' | 'Sun';
 const { start, end } = getDays();
 const client = new Client(accessToken);
 
-export const reduceSleepData = (data): SleepData[] => {
+const reduceSleepData = (data): SleepData[] => {
   const sleepDataMap = new Map<string, SleepData>();
 
   for (const rawData of data) {
@@ -55,7 +56,7 @@ export const reduceSleepData = (data): SleepData[] => {
   return Array.from(sleepDataMap.values());
 };
 
-export function mergeSleepData(sleepDataArray: SleepData[], sleepDurationDataArray: SleepDurationData[]): SleepDurationData[] {
+const mergeSleepData = (sleepDataArray: SleepData[], sleepDurationDataArray: SleepDurationData[]): SleepDurationData[] => {
   const mergedData: SleepDurationData[] = sleepDurationDataArray.map(sleepDurationData => {
     const sleepData = sleepDataArray.find(sleep => sleep.day === sleepDurationData.date);
 
@@ -77,7 +78,7 @@ export function mergeSleepData(sleepDataArray: SleepData[], sleepDurationDataArr
 }
 
 
-async function fetchSleepData({ start, end }: SleepDataInput): Promise<SleepDurationData[] | null> {
+const fetchSleepData = async ({ start, end }: SleepDataInput): Promise<SleepDurationData[] | null> => {
   
     const daysOfTheWeek : DayOfWeekString[] = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     const sleepDurationArray = [];
@@ -104,7 +105,7 @@ async function fetchSleepData({ start, end }: SleepDataInput): Promise<SleepDura
   }
 }
 
-async function fetchRunData({ start, end }: FetchRunDataInput): Promise<number | null> {
+const fetchRunData = async({ start, end }: FetchRunDataInput): Promise<number | null> => {
   try {
     const workout = await client.getWorkout({ start_date: start, end_date: end }); 
     const totalRunningDist = workout.data
@@ -128,3 +129,10 @@ export const resolvers = {
     },
   };
   
+
+  const tests = {
+    mergeSleepData,
+    reduceSleepData
+  };
+
+  export { tests };

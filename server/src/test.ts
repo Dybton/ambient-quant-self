@@ -1,4 +1,4 @@
-import { reduceSleepData, mergeSleepData} from './resolvers';
+import { tests} from './resolvers';
 
 describe('reduceSleepData', () => {
     it('merges the total sleep duration for duplicate days', () => {
@@ -34,7 +34,7 @@ describe('reduceSleepData', () => {
         },
       ];
   
-      const result = reduceSleepData(rawData);
+      const result = tests.reduceSleepData(rawData);
   
       expect(result).toEqual(expectedSleepData);
     });
@@ -67,7 +67,7 @@ describe('reduceSleepData', () => {
         { date: '2023-03-26', day: 'Sun', duration: { hours: 0, minutes: 0 } },
       ];
     
-      const result = mergeSleepData(sleepDataArray, sleepDurationDataArray);
+      const result = tests.mergeSleepData(sleepDataArray, sleepDurationDataArray);
       expect(result).toEqual(expectedResult);
     });    
 });
