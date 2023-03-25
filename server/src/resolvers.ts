@@ -72,7 +72,7 @@ async function fetchSleepData({ start, end }: SleepDataInput): Promise<SleepDura
   
     daysOfTheWeek2.forEach(day => {
       const sleepObj : SleepDurationData = {
-        date: getDateFromWeekDay(day),
+        date: getDateFromWeekDay(day).toISOString().substring(0, 10),
         day: day,
         duration: { hours: 0, minutes: 0 }
       }

@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.resolvers = void 0;
 const oura_cloud_api_1 = __importDefault(require("oura-cloud-api"));
 const accessToken = 'CWDIVW2X5NB4CPSFV73IEKMZBJUATRKW'; // todo: Place this in env file
+process.env.TZ = 'Europe/Copenhagen';
 const utilities_js_1 = require("./utilities.js");
 const { start, end } = (0, utilities_js_1.getDays)();
 const client = new oura_cloud_api_1.default(accessToken);
@@ -24,27 +25,27 @@ const mergeSleepDuration = (sleepDuration) => {
         }
     });
     const result = [];
-    const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    daysOfWeek.forEach(dayOfWeek => {
-        const date = Object.keys(mergedDuration).find(date => {
-            const day = new Date(date).toLocaleString('da-DK', { weekday: 'short' }).toLowerCase();
-            return day === dayOfWeek;
-        });
-        if (date) {
-            const duration = mergedDuration[date];
-            let { hours, minutes } = duration;
-            hours += Math.floor(minutes / 60);
-            minutes = minutes % 60;
-            const day = new Date(date).toLocaleString('en-US', { weekday: 'short' });
-            result.push({ date, day, duration: { hours, minutes } });
-        }
-        else {
-            result.push({ date: '', day: dayOfWeek, duration: { hours: 0, minutes: 0 } });
-        }
+    Object.entries(mergedDuration).forEach(([date, duration]) => {
+        let { hours, minutes } = duration;
+        hours += Math.floor(minutes / 60);
+        minutes = minutes % 60;
+        const day = new Date(date).toLocaleString('en-US', { weekday: 'short' });
+        result.push({ date, day, duration: { hours, minutes } });
     });
     return result;
 };
 async function fetchSleepData({ start, end }) {
+    const daysOfTheWeek2 = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']; // create type for this
+    const arr = [];
+    daysOfTheWeek2.forEach(day => {
+        const sleepObj = {
+            date: (0, utilities_js_1.getDateFromWeekDay)(day).toISOString().substring(0, 10),
+            day: day,
+            duration: { hours: 0, minutes: 0 }
+        };
+        arr.push(sleepObj);
+    });
+    console.log(arr);
     try {
         const sleep = await client.getSleep({ start_date: start, end_date: end });
         const sleepDuration = sleep.data.map((day) => {
@@ -52,6 +53,19 @@ async function fetchSleepData({ start, end }) {
             const duration = (0, utilities_js_1.convertSecondsToTime)(day.total_sleep_duration);
             return { date, duration };
         });
+        // Usage
+        try {
+            console.log("Monday", (0, utilities_js_1.getDateFromWeekDay)("Monday"));
+            // console.log("Tuesday", getWeekDayDate("Tuesday"));
+            // console.log("Wednesday", getWeekdayDate("Wednesday"));
+            // console.log("Thursday", getWeekdayDate("Thursday"));
+            // console.log("Friday", getWeekdayDate("Friday"));
+            // console.log("Saturday", getWeekdayDate("Saturday"));
+            // console.log("Sunday", getWeekdayDate("Sunday"));
+        }
+        catch (error) {
+            console.error(error.message);
+        }
         const mergedSleepDuration = mergeSleepDuration(sleepDuration);
         return mergedSleepDuration;
     }

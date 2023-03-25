@@ -31,7 +31,7 @@ export const convertSecondsToTime = (seconds: number) => {
   };
   
 
-  export const getWeekdayDate =(weekday) => {
+  export const getDateFromWeekDay =(weekday) => {
     const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
     const inputDayIndex = dayNames.findIndex(day => day.toLowerCase() === weekday.toLowerCase());
   
@@ -48,7 +48,7 @@ export const convertSecondsToTime = (seconds: number) => {
     startOfWeek.setDate(startOfWeek.getDate() - adjustedCurrentDayIndex);
   
     const targetDate = new Date(startOfWeek);
-    targetDate.setDate(targetDate.getDate() + inputDayIndex +1);
+    targetDate.setDate(targetDate.getDate() + inputDayIndex);
   
     return targetDate;
   }
