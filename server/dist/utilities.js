@@ -1,12 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDateFromWeekDay = exports.getDays = exports.convertSecondsToTime = exports.getMonday = void 0;
-const getMonday = (d) => {
-    d = new Date(d);
-    var day = d.getDay(), diff = d.getDate() - day + (day == 0 ? -6 : 1); // adjust when day is sunday
-    return new Date(d.setDate(diff));
-};
-exports.getMonday = getMonday;
+exports.getDateFromWeekDay = exports.getDays = exports.convertSecondsToTime = void 0;
 const convertSecondsToTime = (seconds) => {
     let hours = Math.floor(seconds / 3600);
     let minutes = Math.floor((seconds % 3600) / 60);
@@ -34,7 +28,6 @@ const getDateFromWeekDay = (weekday) => {
     const today = new Date();
     const currentDayIndex = today.getDay();
     const adjustedCurrentDayIndex = (currentDayIndex + 6) % 7; // Adjusts the index to treat Monday as the first day
-    const daysUntilInputDay = (inputDayIndex - adjustedCurrentDayIndex + 7) % 7; // Ensures a positive number of days
     const startOfWeek = new Date(today);
     startOfWeek.setDate(startOfWeek.getDate() - adjustedCurrentDayIndex);
     const targetDate = new Date(startOfWeek);

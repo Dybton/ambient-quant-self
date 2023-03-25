@@ -36,36 +36,26 @@ const mergeSleepDuration = (sleepDuration) => {
 };
 async function fetchSleepData({ start, end }) {
     const daysOfTheWeek2 = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']; // create type for this
-    const arr = [];
-    daysOfTheWeek2.forEach(day => {
+    const sleepDurationArray = [];
+    daysOfTheWeek2.map(day => {
         const sleepObj = {
             date: (0, utilities_js_1.getDateFromWeekDay)(day),
             day: day,
             duration: { hours: 0, minutes: 0 }
         };
-        arr.push(sleepObj);
+        sleepDurationArray.push(sleepObj);
     });
-    console.log(arr);
+    console.log(sleepDurationArray);
     try {
         const sleep = await client.getSleep({ start_date: start, end_date: end });
+        console.log(sleep.data);
+        // Cont from here: Use the sleepDurationArray to merge the data from the API
         const sleepDuration = sleep.data.map((day) => {
+            // Here we need to run the mergesSleepDuration function, such that we catch it while we construct the array
             const date = day.day;
             const duration = (0, utilities_js_1.convertSecondsToTime)(day.total_sleep_duration);
             return { date, duration };
         });
-        // Usage
-        try {
-            console.log("Monday", (0, utilities_js_1.getDateFromWeekDay)("Monday"));
-            // console.log("Tuesday", getWeekDayDate("Tuesday"));
-            // console.log("Wednesday", getWeekdayDate("Wednesday"));
-            // console.log("Thursday", getWeekdayDate("Thursday"));
-            // console.log("Friday", getWeekdayDate("Friday"));
-            // console.log("Saturday", getWeekdayDate("Saturday"));
-            // console.log("Sunday", getWeekdayDate("Sunday"));
-        }
-        catch (error) {
-            console.error(error.message);
-        }
         const mergedSleepDuration = mergeSleepDuration(sleepDuration);
         return mergedSleepDuration;
     }
