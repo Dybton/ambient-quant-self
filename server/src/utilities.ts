@@ -18,11 +18,9 @@ export const convertSecondsToTime = (seconds: number) => {
 
 
   export const getDays = (): { start: string, end: string } => {
-    const today = new Date();
-    const lastMonday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - (today.getDay() + 6) % 7);
-    const nextSunday = new Date(lastMonday.getFullYear(), lastMonday.getMonth(), lastMonday.getDate() + 6);
-    const lastMondayString = lastMonday.toISOString().substring(0, 10);
-    const nextSundayString = nextSunday.toISOString().substring(0, 10);
+
+    const lastMondayString = getDateFromWeekDay("Mon");
+    const nextSundayString = getDateFromWeekDay("Sun");
   
     return {
       start: lastMondayString,
@@ -42,14 +40,14 @@ export const convertSecondsToTime = (seconds: number) => {
     const today = new Date() ;
     const currentDayIndex = today.getDay();
     const adjustedCurrentDayIndex = (currentDayIndex + 6) % 7; // Adjusts the index to treat Monday as the first day
-    const daysUntilInputDay = (inputDayIndex - adjustedCurrentDayIndex + 7) % 7; // Ensures a positive number of days
   
     const startOfWeek = new Date(today);
     startOfWeek.setDate(startOfWeek.getDate() - adjustedCurrentDayIndex);
   
     const targetDate = new Date(startOfWeek);
     targetDate.setDate(targetDate.getDate() + inputDayIndex);
+    const returnDate = targetDate.toISOString().substring(0, 10);
   
-    return targetDate;
+    return returnDate;
   }
   

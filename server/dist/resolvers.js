@@ -39,7 +39,7 @@ async function fetchSleepData({ start, end }) {
     const arr = [];
     daysOfTheWeek2.forEach(day => {
         const sleepObj = {
-            date: (0, utilities_js_1.getDateFromWeekDay)(day).toISOString().substring(0, 10),
+            date: (0, utilities_js_1.getDateFromWeekDay)(day),
             day: day,
             duration: { hours: 0, minutes: 0 }
         };
