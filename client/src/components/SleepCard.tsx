@@ -35,8 +35,11 @@ const SleepCard: React.FC = () => {
   
   const { sleepDuration } = data;
 
-  console.log(sleepDuration);
-  console.log(sleepData);
+  sleepDuration.forEach((day: any) => {
+    const { hours, minutes } = day.duration;
+    const dayName = day.day;
+    console.log(dayName, hours, minutes)
+  });
 
   return (
     <div className="shadow-lg w-full rounded-3xl h-3/6 mt-14 flex-row  divide-y-[2px]">
@@ -44,13 +47,16 @@ const SleepCard: React.FC = () => {
         <CardHeader title={{ text: 'Sleep', size: 'text-2xl' }} icon={<SleepIcon/>}/>
       </div>
       <div className="flex h-4/6 justify-between ">
-        {sleepData.map((day, index) => {
-          const sleepPercentage = calculateSleepPercentage(sleepData[index].hours, sleepData[index].minutes);
-          const sleepTime = `${sleepData[index].hours}h ${sleepData[index].minutes}m`;
+        {sleepDuration.map((day: { duration: { hours: number; minutes: number; }; day: string; }) => {
+          const { hours, minutes } = day.duration;
+          const dayName = day.day;
+
+          const sleepPercentage = calculateSleepPercentage(hours, minutes);
+          const sleepTime = `${hours}h ${minutes}m`;
           return (
             <div className=" flex-1 flex flex-col justify-end items-center">
-              <VerticalProgressBar label={sleepTime} percentage={sleepPercentage} id={`v${index}`}/>
-              <span>{sleepData[index].day}</span>
+              <VerticalProgressBar label={sleepTime} percentage={sleepPercentage} id={`v${dayName}`}/>
+              <span>{dayName}</span>
             </div>
           );
         })}
