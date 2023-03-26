@@ -1,15 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDateFromWeekDay = exports.getDays = exports.convertSecondsToTime = void 0;
-const convertSecondsToTime = (seconds) => {
-    let hours = Math.floor(seconds / 3600);
-    let minutes = Math.floor((seconds % 3600) / 60);
-    return {
-        hours,
-        minutes,
-    };
-};
-exports.convertSecondsToTime = convertSecondsToTime;
+exports.getDateFromWeekDay = exports.getDays = void 0;
 const getDays = () => {
     const lastMondayString = (0, exports.getDateFromWeekDay)("Mon");
     const nextSundayString = (0, exports.getDateFromWeekDay)("Sun");

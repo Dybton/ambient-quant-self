@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resolvers = exports.mergeSleepData = exports.reduceSleepData = void 0;
+exports.tests = exports.resolvers = void 0;
 const oura_cloud_api_1 = __importDefault(require("oura-cloud-api"));
 const accessToken = 'CWDIVW2X5NB4CPSFV73IEKMZBJUATRKW'; // todo: Place this in env file
 process.env.TZ = 'Europe/Copenhagen';
@@ -25,8 +25,7 @@ const reduceSleepData = (data) => {
     }
     return Array.from(sleepDataMap.values());
 };
-exports.reduceSleepData = reduceSleepData;
-function mergeSleepData(sleepDataArray, sleepDurationDataArray) {
+const mergeSleepData = (sleepDataArray, sleepDurationDataArray) => {
     const mergedData = sleepDurationDataArray.map(sleepDurationData => {
         const sleepData = sleepDataArray.find(sleep => sleep.day === sleepDurationData.date);
         const duration = sleepData
@@ -42,9 +41,8 @@ function mergeSleepData(sleepDataArray, sleepDurationDataArray) {
         };
     });
     return mergedData;
-}
-exports.mergeSleepData = mergeSleepData;
-async function fetchSleepData({ start, end }) {
+};
+const fetchSleepData = async ({ start, end }) => {
     const daysOfTheWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     const sleepDurationArray = [];
     daysOfTheWeek.map(day => {
@@ -57,7 +55,7 @@ async function fetchSleepData({ start, end }) {
     });
     try {
         const sleep = await client.getSleep({ start_date: start, end_date: end });
-        const reducedSleepData = (0, exports.reduceSleepData)(sleep.data);
+        const reducedSleepData = reduceSleepData(sleep.data);
         const mergedSleepData = mergeSleepData(reducedSleepData, sleepDurationArray);
         return mergedSleepData;
     }
@@ -65,8 +63,8 @@ async function fetchSleepData({ start, end }) {
         console.error('Error fetching sleep data:', error);
         return null;
     }
-}
-async function fetchRunData({ start, end }) {
+};
+const fetchRunData = async ({ start, end }) => {
     try {
         const workout = await client.getWorkout({ start_date: start, end_date: end });
         const totalRunningDist = workout.data
@@ -78,7 +76,7 @@ async function fetchRunData({ start, end }) {
         console.error('Error fetching running data:', error);
         return null;
     }
-}
+};
 exports.resolvers = {
     Query: {
         sleepDuration: async () => await fetchSleepData({ start, end }),
@@ -88,4 +86,9 @@ exports.resolvers = {
         },
     },
 };
+const tests = {
+    mergeSleepData,
+    reduceSleepData
+};
+exports.tests = tests;
 //# sourceMappingURL=resolvers.js.map

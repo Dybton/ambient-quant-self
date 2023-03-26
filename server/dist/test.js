@@ -33,7 +33,7 @@ describe('reduceSleepData', () => {
                 total_sleep_duration: 2400,
             },
         ];
-        const result = (0, resolvers_1.reduceSleepData)(rawData);
+        const result = resolvers_1.tests.reduceSleepData(rawData);
         expect(result).toEqual(expectedSleepData);
     });
 });
@@ -61,7 +61,7 @@ describe('mergeSleepData', () => {
             { date: '2023-03-25', day: 'Sat', duration: { hours: 0, minutes: 0 } },
             { date: '2023-03-26', day: 'Sun', duration: { hours: 0, minutes: 0 } },
         ];
-        const result = (0, resolvers_1.mergeSleepData)(sleepDataArray, sleepDurationDataArray);
+        const result = resolvers_1.tests.mergeSleepData(sleepDataArray, sleepDurationDataArray);
         expect(result).toEqual(expectedResult);
     });
 });
