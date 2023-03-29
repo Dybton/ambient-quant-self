@@ -1,13 +1,13 @@
 const targetWebsites = [
   'facebook.com',
-  'linkedin.com',
-  'youtube.com'
-]; // Replace with the domains you want to track
-let startTime = null;
+  'twitter.com',
+  '9gag.com',
+];
+let activeWebsite = null;
 let timeSpent = {
   'facebook.com': 0,
-  'linkedin.com': 0,
-  'youtube.com': 0,
+  'twitter.com': 0,
+  '9gag.com': 0,
 };
 
 function getCurrentWebsite(url) {
@@ -20,39 +20,50 @@ function getCurrentWebsite(url) {
 }
 
 function updateSpentTime(currentWebsite) {
-  if (startTime && currentWebsite) {
-    const now = new Date();
-    timeSpent[currentWebsite] += (now - startTime) / 1000; // Time spent in seconds
-    startTime = now;
+  if (currentWebsite) {
+    timeSpent[currentWebsite] += 1; // Increment time spent by 1 second
     console.log(`Time spent on ${currentWebsite}: ${timeSpent[currentWebsite]} seconds`);
+    chrome.storage.local.set({ timeSpent }); // Save the updated data to storage
   }
+}
+
+function checkActiveWebsite() {
+  chrome.windows.getLastFocused({ populate: true }, (window) => {
+    const activeTab = window.tabs.find((tab) => tab.active);
+    const currentWebsite = getCurrentWebsite(activeTab.url);
+
+    if (currentWebsite !== activeWebsite) {
+      activeWebsite = currentWebsite;
+    }
+
+    updateSpentTime(activeWebsite);
+  });
 }
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === 'complete') {
-    const currentWebsite = getCurrentWebsite(tab.url);
-    updateSpentTime(currentWebsite);
-    startTime = currentWebsite ? new Date() : null;
+    checkActiveWebsite();
   }
 });
 
-chrome.tabs.onActivated.addListener((activeInfo) => {
-  chrome.tabs.get(activeInfo.tabId, (tab) => {
-    const currentWebsite = getCurrentWebsite(tab.url);
-    updateSpentTime(currentWebsite);
-    startTime = currentWebsite ? new Date() : null;
-  });
+chrome.tabs.onActivated.addListener(() => {
+  checkActiveWebsite();
 });
 
 chrome.windows.onFocusChanged.addListener((windowId) => {
   if (windowId === chrome.windows.WINDOW_ID_NONE) {
-    updateSpentTime(null);
-    startTime = null;
+    activeWebsite = null;
   } else {
-    chrome.tabs.query({ active: true, windowId: windowId }, (tabs) => {
-      const currentWebsite = tabs[0] ? getCurrentWebsite(tabs[0].url) : null;
-      updateSpentTime(currentWebsite);
-      startTime = currentWebsite ? new Date() : null;
-    });
+    checkActiveWebsite();
   }
 });
+
+// Load the previous data from storage
+chrome.storage.local.get(['timeSpent'], (result) => {
+  if (result.timeSpent) {
+    timeSpent = result.timeSpent;
+  }
+});
+
+// Check the active website and update time spent every second
+setInterval(checkActiveWebsite, 1000);

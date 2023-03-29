@@ -14,5 +14,5 @@
     "default_icon": "icons/icon-16.png",
     "default_title": "Log Hello"
   },
-  "permissions": ["activeTab", "tabs"]
+  "permissions": ["activeTab", "tabs", "storage"]
 }
