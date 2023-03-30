@@ -65,5 +65,22 @@ chrome.storage.local.get(['timeSpent'], (result) => {
   }
 });
 
+function sendDataToServer(timeSpent) {
+  fetch('http://localhost:4000/api/website-time', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(timeSpent),
+  })
+    .then((response) => response.text())
+    .then((responseText) => console.log(responseText))
+    .catch((error) => console.error('Error:', error));
+}
+
+
 // Check the active website and update time spent every second
 setInterval(checkActiveWebsite, 1000);
+setInterval(() => {
+  sendDataToServer(timeSpent);
+}, 36000);
