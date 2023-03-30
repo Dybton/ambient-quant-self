@@ -84,6 +84,9 @@ exports.resolvers = {
             const distance = await fetchRunData({ start, end });
             return { distance };
         },
+        getTimeSpent: (_, __, { timeSpentData }) => {
+            return timeSpentData;
+        },
     },
 };
 const tests = {
