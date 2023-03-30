@@ -6,14 +6,9 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 
 const app = express();
-// const timeSpentData = {};
-
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  // context: () => ({
-  //   timeSpentData,
-  // }),
 });
 
 // Middleware
@@ -23,11 +18,12 @@ app.use(bodyParser.json());
 // Chrome API
 app.post('/api/website-time', (req, res) => {
   console.log('Received data:', req.body);
-  // Object.assign(timeSpentData, req.body);
+  console.log('Received request:', req);
   res.send('Data received');
 });
 
 (async () => {
+  // Ensure the server starts before applying middleware
   await server.start();
   server.applyMiddleware({ app });
 

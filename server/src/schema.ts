@@ -25,7 +25,6 @@ export const typeDefs = gql`
   type Query {
     sleepDuration: [SleepDuration!]!
     runDistance: RunDistance!
-    timeSpent: TimeSpent
   }
   
 `;
