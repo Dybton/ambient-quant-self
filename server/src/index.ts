@@ -1,34 +1,35 @@
-import { ApolloServer } from 'apollo-server-express';
 import express from 'express';
-import { typeDefs } from './schema.js';
-import { resolvers } from './resolvers.js';
+import { ApolloServer } from 'apollo-server-express';
 import cors from 'cors';
-import bodyParser from 'body-parser';
+import { typeDefs } from './schema';
+import { resolvers } from './resolvers';
 
 const app = express();
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-});
+const port = 4000;
 
-// Middleware
+// Global variable to store time spent data
+let timeSpentData = {};
+
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
-// Chrome API
+// Route to handle incoming POST requests from the Chrome extension
 app.post('/api/website-time', (req, res) => {
-  console.log('Received data:', req.body);
-  console.log('Received request:', req);
+  timeSpentData = req.body;
   res.send('Data received');
 });
 
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: () => ({ timeSpentData }),
+});
+
 (async () => {
-  // Ensure the server starts before applying middleware
   await server.start();
   server.applyMiddleware({ app });
 
-  const port = 4000;
   app.listen(port, () => {
-    console.log(`🚀 Server ready at http://localhost:${port}${server.graphqlPath}`);
+    console.log(`Server listening at http://localhost:${port}${server.graphqlPath}`);
   });
 })();

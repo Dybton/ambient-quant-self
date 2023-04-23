@@ -77,12 +77,18 @@ const fetchRunData = async ({ start, end }) => {
         return null;
     }
 };
+const fetchTimeSpent = async (context) => {
+    return Object.entries(context.timeSpentData).map(([website, time]) => ({ website, time: time }));
+};
 exports.resolvers = {
     Query: {
         sleepDuration: async () => await fetchSleepData({ start, end }),
         runDistance: async () => {
             const distance = await fetchRunData({ start, end });
             return { distance };
+        },
+        timeSpent: async (_, __, context) => {
+            return await fetchTimeSpent(context);
         },
     },
 };

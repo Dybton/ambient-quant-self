@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.typeDefs = void 0;
-const apollo_server_express_1 = require("apollo-server-express");
-exports.typeDefs = (0, apollo_server_express_1.gql) `
+const apollo_server_1 = require("apollo-server");
+exports.typeDefs = (0, apollo_server_1.gql) `
   type SleepDuration {
     day: String!
     date: String!
@@ -19,15 +19,14 @@ exports.typeDefs = (0, apollo_server_express_1.gql) `
   }
 
   type TimeSpent {
-    9gag_com: Int
-    facebook_com: Int
-    twitter_com: Int
+    website: String!
+    time: Int!
   }
 
   type Query {
     sleepDuration: [SleepDuration!]!
     runDistance: RunDistance!
+    timeSpent: [TimeSpent!]!
   }
-  
 `;
 //# sourceMappingURL=schema.js.map
