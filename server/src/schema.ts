@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server-express';
+import { gql } from 'apollo-server';
 
 export const typeDefs = gql`
   type SleepDuration {
@@ -17,14 +17,13 @@ export const typeDefs = gql`
   }
 
   type TimeSpent {
-    9gag_com: Int
-    facebook_com: Int
-    twitter_com: Int
+    website: String!
+    time: Int!
   }
 
   type Query {
     sleepDuration: [SleepDuration!]!
     runDistance: RunDistance!
+    timeSpent: [TimeSpent!]!
   }
-  
 `;

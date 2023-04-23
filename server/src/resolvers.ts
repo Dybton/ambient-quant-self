@@ -119,12 +119,19 @@ const fetchRunData = async({ start, end }: FetchRunDataInput): Promise<number | 
   }
 }
 
+const fetchTimeSpent = async (context): Promise<{ website: string; time: number }[]> => {
+  return Object.entries(context.timeSpentData).map(([website, time]) => ({ website, time: time as number }));
+};
+
 export const resolvers = {
   Query: {
     sleepDuration: async () => await fetchSleepData({ start, end }),
     runDistance: async () => {
       const distance = await fetchRunData({ start, end });
       return { distance };
+    },
+    timeSpent: async (_, __, context) => {
+      return await fetchTimeSpent(context);
     },
     },
   };
