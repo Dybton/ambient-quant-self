@@ -68,8 +68,9 @@ const fetchRunData = async ({ start, end }) => {
     try {
         const workout = await client.getWorkout({ start_date: start, end_date: end });
         const totalRunningDist = workout.data
-            .filter((day) => day.activity === 'running')
+            .filter((day) => day.activity === 'walking' || day.activity === 'running')
             .reduce((total, day) => total + day.distance, 0);
+        console.log("workout", workout.data);
         return Number((Math.ceil(totalRunningDist) / 1000).toFixed(1));
     }
     catch (error) {
