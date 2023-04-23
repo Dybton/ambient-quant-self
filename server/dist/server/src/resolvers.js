@@ -9,7 +9,8 @@ const accessToken = 'CWDIVW2X5NB4CPSFV73IEKMZBJUATRKW'; // todo: Place this in e
 process.env.TZ = 'Europe/Copenhagen';
 const utilities_1 = require("./utilities");
 const fs_1 = __importDefault(require("fs"));
-const path_1 = __importDefault(require("path"));
+const deepwork_json_1 = __importDefault(require("../../database/deepwork.json"));
+console.log(deepwork_json_1.default);
 const { start, end } = (0, utilities_1.getDays)();
 const client = new oura_cloud_api_1.default(accessToken);
 const reduceSleepData = (data) => {
@@ -68,30 +69,30 @@ const fetchSleepData = async ({ start, end }) => {
 };
 // Read data from the JSON file
 const readData = () => {
-    // const jsonPath = path.join(__dirname, '..', 'src', 'deepwork.json');
-    const jsonPath = path_1.default.join(__dirname, "..", "..", "database", "deepwork.json");
-    const rawData = fs_1.default.readFileSync(jsonPath, "utf-8");
+    const rawData = fs_1.default.readFileSync("../../database/deepwork.json", "utf-8");
     const data = JSON.parse(rawData);
     return data;
 };
 // Write data to the JSON file
 const writeData = (data) => {
-    const jsonPath = path_1.default.join(__dirname, "..", "..", "database", "deepwork.json");
     const rawData = JSON.stringify(data, null, 2);
-    fs_1.default.writeFileSync(jsonPath, rawData);
+    fs_1.default.writeFileSync("../../database/deepwork.json", rawData);
 };
 const isCurrentWeek = (dateString) => {
     const date = new Date(dateString);
-    const { start, end } = (0, utilities_1.getDays)();
-    const currentWeekStart = new Date(start);
-    const currentWeekEnd = new Date(end);
+    const currentDate = new Date();
+    const currentWeekStart = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + (currentDate.getDay() === 0 ? -6 : 1)));
+    const currentWeekEnd = new Date(currentWeekStart);
+    currentWeekEnd.setDate(currentWeekStart.getDate() + 6);
     return date >= currentWeekStart && date <= currentWeekEnd;
 };
 const fetchtDeepWorkHours = () => {
     const data = readData();
     // Filter data to only include entries from the current week
     const currentWeekData = data.filter((entry) => isCurrentWeek(entry.date));
-    return currentWeekData;
+    // Assuming each entry contains a `hours` property, you can sum the deep work hours for the current week
+    const deepWorkHoursThisWeek = currentWeekData.reduce((acc, entry) => acc + entry.hours, 0);
+    return deepWorkHoursThisWeek;
 };
 const fetchRunData = async ({ start, end }) => {
     try {

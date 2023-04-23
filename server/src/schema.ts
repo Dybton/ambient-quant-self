@@ -21,9 +21,15 @@ export const typeDefs = gql`
     time: Int!
   }
 
+  type DeepWork {
+    date: String!
+    deepWorkHours: Int!
+  }
+
   type Query {
     sleepDuration: [SleepDuration!]!
     runDistance: RunDistance!
     timeSpent: [TimeSpent!]!
+    deepWorkHours: [DeepWork!]!
   }
 `;

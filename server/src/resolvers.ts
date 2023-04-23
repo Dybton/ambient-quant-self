@@ -2,6 +2,8 @@ import Client from "oura-cloud-api";
 const accessToken = 'CWDIVW2X5NB4CPSFV73IEKMZBJUATRKW' // todo: Place this in env file
 process.env.TZ = 'Europe/Copenhagen';
 import { getDays, getDateFromWeekDay} from './utilities';
+import fs from 'fs';
+import path from 'path';
 
 
 // This is for the raw data from the API
@@ -105,6 +107,40 @@ const fetchSleepData = async ({ start, end }: SleepDataInput): Promise<SleepDura
   }
 }
 
+// Read data from the JSON file
+const readData = () => {
+  // const jsonPath = path.join(__dirname, '..', 'src', 'deepwork.json');
+  const jsonPath = path.join(__dirname, "..", "..", "database", "deepwork.json");
+  const rawData = fs.readFileSync(jsonPath, "utf-8")
+  const data = JSON.parse(rawData);
+  return data;
+};
+
+// Write data to the JSON file
+const writeData = (data : string) => {
+  const jsonPath = path.join(__dirname, "..", "..", "database", "deepwork.json");
+  const rawData = JSON.stringify(data, null, 2);
+  fs.writeFileSync(jsonPath, rawData);
+};
+
+const isCurrentWeek = (dateString : string) => {
+  const date = new Date(dateString);
+  const { start, end } = getDays();
+
+  const currentWeekStart = new Date(start);
+  const currentWeekEnd = new Date(end);
+
+  return date >= currentWeekStart && date <= currentWeekEnd;
+};
+
+const fetchtDeepWorkHours = () => {
+  const data = readData();
+  // Filter data to only include entries from the current week
+  const currentWeekData = data.filter((entry) => isCurrentWeek(entry.date));
+
+  return currentWeekData;
+};
+
 const fetchRunData = async({ start, end }: FetchRunDataInput): Promise<number | null> => {
   try {
     const workout = await client.getWorkout({ start_date: start, end_date: end }); 
@@ -134,6 +170,7 @@ export const resolvers = {
     timeSpent: async (_, __, context) => {
       return await fetchTimeSpent(context);
     },
+    deepWorkHours: () =>  fetchtDeepWorkHours()
     },
   };
   
