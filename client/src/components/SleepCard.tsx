@@ -7,7 +7,7 @@ import { useQuery } from '@apollo/client';
 
 const calculateSleepPercentage = (hours: number, minutes: number) => {
   const totalMinutes = hours * 60 + minutes;
-  const totalMinutesInDay = 8 * 60;
+  const totalMinutesInDay = 9 * 60;
   const percentage = (totalMinutes / totalMinutesInDay) * 100;
   return percentage;
 }
@@ -32,12 +32,6 @@ const SleepCard: React.FC = () => {
   if (error) return <p>Error: {error.message}</p>;
   
   const { sleepDuration } = data;
-
-  sleepDuration.forEach((day: any) => {
-    const { hours, minutes } = day.duration;
-    const dayName = day.day;
-    console.log(dayName, hours, minutes)
-  });
 
   return (
     <div className="shadow-lg w-full rounded-3xl h-3/6 mt-14 flex-row  divide-y-[2px]">
