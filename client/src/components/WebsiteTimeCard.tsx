@@ -5,12 +5,25 @@ import HorizontalProgressBar from './ProgressBars/HorizontalProgressBar';
 import FacebookIcon from './Icons/FacebookIcon';
 import TwitterIcon from './Icons/TwitterIcon';
 import LinkedinIcon from './Icons/LinkedinIcon';
+import { gql, useQuery } from '@apollo/client';
 
 
-interface Props {}
+const WEBSITE_TIME_QUERY = gql`
+  query {
+    timeSpent {
+      website
+      time
+    }
+  }
+`;
 
+const WebsiteTimeCard: React.FC = () => {
 
-const WebsiteTimeCard: React.FC<Props> = () => {
+  const { loading, error, data } = useQuery(WEBSITE_TIME_QUERY);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
   return (
     <div className="shadow-lg w-full rounded-3xl h-3/5">
       <div className='flex-row h-1/6 w-full'>
