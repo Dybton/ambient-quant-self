@@ -25,6 +25,15 @@ const SLEEP_DURATION_QUERY = gql`
   }
 `;
 
+type SleepDuration = {
+  date: string;
+  day: string;
+  duration: {
+    hours: number;
+    minutes: number;
+  };
+};
+
 const SleepCard: React.FC = () => {
   const { loading, error, data } = useQuery(SLEEP_DURATION_QUERY);
 
@@ -39,23 +48,29 @@ const SleepCard: React.FC = () => {
         <CardHeader title={{ text: 'Sleep', size: 'text-2xl' }} icon={<SleepIcon/>}/>
       </div>
       <div className="flex h-4/6 justify-between ">
-        {sleepDuration.map((day: { duration: { hours: number; minutes: number; }; day: string; }) => {
-          const { hours, minutes } = day.duration;
-          const dayName = day.day;
+        {sleepDuration.map((day: SleepDuration) => {
 
-          const sleepPercentage = calculateSleepPercentage(hours, minutes);
-          const sleepTime = hours ? `${hours}h ${minutes}m` : "No data"
+          const { hours, minutes } = day.duration
+          const dayName = day.day;
           
-          return (
-            <div className=" flex-1 flex flex-col justify-end items-center">
-              <VerticalProgressBar label={sleepTime} percentage={sleepPercentage} id={`v${dayName}`}/>
-              <span>{dayName}</span>
-            </div>
-          );
+          return SleepProgressBar(hours, minutes, dayName);
         })}
+
       </div>
     </div>
   );
 };
+
+const SleepProgressBar = (hours: number, minutes: number, weekDay: string) => {
+  const sleepPercentage = calculateSleepPercentage(hours, minutes);
+  const sleepTime = hours ? `${hours}h ${minutes}m` : "No data"
+
+  return (
+    <div className=" flex-1 flex flex-col justify-end items-center">
+      <VerticalProgressBar label={sleepTime} percentage={sleepPercentage} id={`v${weekDay}`}/>
+      <span>{weekDay}</span>
+    </div>
+  )
+} 
 
 export default SleepCard;
