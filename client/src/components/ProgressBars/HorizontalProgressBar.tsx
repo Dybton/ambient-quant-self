@@ -7,6 +7,8 @@ interface HorizontalProgressBarProps {
   id: string;
   h: number;
   w?: string;
+  label?: string;
+  websiteBar?: boolean;
 }
 
 const HorizontalProgressBar: React.FC<HorizontalProgressBarProps> = (props) => {
@@ -18,7 +20,7 @@ const HorizontalProgressBar: React.FC<HorizontalProgressBarProps> = (props) => {
         style={{ height: `${props.h}px` }}
       >
         <div
-          className="bg-blue-600 rounded-full"
+          className={props.websiteBar ? "bg-red-600 rounded-full" : "bg-blue-600 rounded-full"}
           style={{
             width: `${Math.min(props.percentage, 100)}%`,
             height: `${props.h}px`,
@@ -29,7 +31,7 @@ const HorizontalProgressBar: React.FC<HorizontalProgressBarProps> = (props) => {
         <ReactTooltip
           anchorId={`tooltip-id-${props.id}`}
           place="top"
-          content={`${props.percentage}%`}
+          content={props.websiteBar ? `${props.label}` : `${props.percentage}%`}
         />
       )}
     </>

@@ -19,7 +19,7 @@ const WEBSITE_TIME_QUERY = gql`
 enum Website {
   Facebook = 'facebook.com',
   Twitter = 'twitter.com',
-  // Linkedin = 'linkedin.com',
+  Linkedin = 'linkedin.com',
 }
 
 const getIcon = (website: Website) => {
@@ -28,22 +28,29 @@ const getIcon = (website: Website) => {
       return <FacebookIcon />;
     case Website.Twitter:
       return <TwitterIcon />;
-    // case Website.Linkedin:
-    //   return <LinkedinIcon />;
+    case Website.Linkedin:
+      return <LinkedinIcon />;
     default:
       return null;
   }
 };
 
+const convertSecondsToMinutes = (seconds: number | undefined) => {
+  if (!seconds) {
+    return 0;
+  }
+  return Math.round(seconds / 60);
+}
+
 const WebsiteTimeCard: React.FC = () => {
   const { loading, error, data} = useQuery(WEBSITE_TIME_QUERY);
-
-  console.log("data", data)
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
+  const maxTime = 30;
   const totalTime = data.timeSpent.reduce((acc: number, curr: { time: number }) => acc + curr.time, 0);
+  const totalTimeInMinutes = convertSecondsToMinutes(totalTime)
 
   if (!data.timeSpent || data.timeSpent.length === 0) {
     return <p>No data currently available.</p>;
@@ -57,7 +64,7 @@ const WebsiteTimeCard: React.FC = () => {
       
       <div className='flex mt-4 flex-col'>
         <div className='ml-8 mb-2 w-full'>
-          <p className='font-bold text-3xl'>{totalTime}/160</p>
+          <p className='font-bold text-3xl'>{totalTimeInMinutes}/{maxTime}</p>
         </div>
         {data.timeSpent.map(({ website, time }: { website: string; time: number }) => (
           <WebSiteSection key={website} website={website as Website} time={time} />
@@ -69,23 +76,30 @@ const WebsiteTimeCard: React.FC = () => {
 
 type WebSiteSectionProps = {
   website: Website;
-  time: number;
+  time?: number;
 };
 
-const getWebsitePercentage = (time: number) => {
-  const totalMinutesInDay = 9 * 60;
+const getWebsitePercentage = (time: number | undefined) => {
+  const totalMinutesInDay = 10 * 60;
+  if(!time) return 0;
   const percentage = (time / totalMinutesInDay) * 100;
   return percentage;
 }
 
-const WebSiteSection: React.FC<WebSiteSectionProps> = ({ website, time }) => (
+const WebSiteSection: React.FC<WebSiteSectionProps> = ({ website, time }) => {
+  
+  const websiteMinutes = convertSecondsToMinutes(time);
+  const websiteSeconds = time ? time % 60 : 0;
+  const websiteTime = time ? `${websiteMinutes}m ${websiteSeconds}s` : "No data"
+
+  return (
   <div className='ml-8 h-1/5 w-full mb-3'>
     <p className='font-light'>{website}</p>
     <div className='flex flex-row items-center mt-1'>
       <div className='mr-1 w-8'>{getIcon(website)}</div>
-      <HorizontalProgressBar percentage={getWebsitePercentage(time)} id={`h-${website}`} h={8} w={'4/6'} />
+      <HorizontalProgressBar websiteBar={true} label={websiteTime} percentage={getWebsitePercentage(time)} id={`h-${website}`} h={8} w={'4/6'} />
     </div>
   </div>
-);
+)};
 
 export default WebsiteTimeCard;
