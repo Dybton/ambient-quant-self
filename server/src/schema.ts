@@ -25,11 +25,16 @@ export const typeDefs = gql`
     date: String!
     deepWorkHours: Int!
   }
-
+  
   type Query {
     sleepDuration: [SleepDuration!]!
     runDistance: RunDistance!
     timeSpent: [TimeSpent!]!
     deepWorkHours: [DeepWork!]!
   }
-`;
+
+  type Mutation {
+    updateDeepWorkHours(date: String!, hours: Int!): DeepWork!
+  }
+`
+;

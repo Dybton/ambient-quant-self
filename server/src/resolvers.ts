@@ -135,12 +135,27 @@ const isCurrentWeek = (dateString : string) => {
 
 const fetchtDeepWorkHours = () => {
   const data = readData();
-  // Filter data to only include entries from the current week
   const currentWeekData = data.filter((entry) => isCurrentWeek(entry.date));
 
   return currentWeekData;
 };
 
+const updateDeepWorkHours = async (_, { date, hours }) => {
+  const deepWorkHoursData = readData();
+
+  const existingData = deepWorkHoursData.find((data) => data.date === date);
+  if (existingData) { 
+    existingData.deepWorkHours = hours;
+  } else {
+    deepWorkHoursData.push({ date, deepWorkHours: hours });
+  }
+
+  writeData(deepWorkHoursData);
+
+  return { date, deepWorkHours: existingData ? existingData.deepWorkHours : hours };
+};
+
+// Todo: Make this return both monthly and weekly totalRunning distance
 const fetchRunData = async({ start, end }: FetchRunDataInput): Promise<number | null> => {
   try {
     const workout = await client.getWorkout({ start_date: start, end_date: end }); 
@@ -148,7 +163,6 @@ const fetchRunData = async({ start, end }: FetchRunDataInput): Promise<number | 
       .filter((day: WorkoutData) => day.activity === 'walking' || day.activity === 'running')
       .reduce((total: number, day: WorkoutData) => total + day.distance, 0);
     
-    console.log("workout", workout.data)
     return Number((Math.ceil(totalRunningDist) / 1000).toFixed(1));
   } catch (error) {
     console.error('Error fetching running data:', error);
@@ -172,6 +186,10 @@ export const resolvers = {
     },
     deepWorkHours: () =>  fetchtDeepWorkHours()
     },
+  Mutation: {
+  updateDeepWorkHours: (_, { date, hours }) => updateDeepWorkHours(_, { date, hours }),
+}
+
   };
   
 
