@@ -2,9 +2,9 @@ import React from 'react';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
-interface CircularProgressBarProps {
+type CircularProgressBarProps = {
   percentage: number;
-}
+};
 
 const CircularProgressBar: React.FC<CircularProgressBarProps> = ({ percentage }) => {
   return (

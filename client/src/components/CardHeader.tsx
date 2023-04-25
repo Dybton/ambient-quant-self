@@ -1,13 +1,13 @@
 import React, { SVGProps } from 'react';
 
-interface CardHeaderProps {
+
+type CardHeaderProps = {
   title: {
     text: string;
     size: string;
-  }
+  };
   icon: React.ReactElement<SVGProps<SVGSVGElement>>;
-}
-
+};
 
 const CardHeader: React.FC<CardHeaderProps> = ({ title, icon }) => {
   return (
