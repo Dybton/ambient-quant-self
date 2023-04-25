@@ -36,13 +36,16 @@ const UPDATE_DEEP_WORK_HOURS = gql`
 
 
 const sumWeeklyDeepWorkHours = (data: DeepWorkHoursData): number => {
-  return data.deepWorkHours.reduce((sum, item) => sum + item.deepWorkHours, 0);
+  const output = data.deepWorkHours.reduce((sum, item) => sum + item.deepWorkHours, 0);
+  console.log("data", data.deepWorkHours)
+  console.log("output", output)
+  return output
 };
   
 const DeepWorkCard: React.FC = () => {
   const [weeklyDeepWorkHours, setWeeklyDeepWorkHours] = React.useState(0);
 
-  const { loading, error, data } = useQuery(DEEP_WORK_QUERY);
+  const { loading, error, data} = useQuery(DEEP_WORK_QUERY);
 
   const [updateDeepWorkHours] = useMutation(UPDATE_DEEP_WORK_HOURS, {
     onCompleted: (data) => {
@@ -50,13 +53,13 @@ const DeepWorkCard: React.FC = () => {
       setWeeklyDeepWorkHours(sumWeeklyDeepWorkHours({ deepWorkHours: [data.updateDeepWorkHours] }));
     },
   });
-
+    
   useEffect(() => {
     if (data) {
       setWeeklyDeepWorkHours(sumWeeklyDeepWorkHours(data));
     }
   }, [data]);
-    
+  
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
@@ -66,9 +69,9 @@ const DeepWorkCard: React.FC = () => {
   };
 
   const handleIncrement = () => {
-    const newHours = weeklyDeepWorkHours + 1;
+    const newHours = weeklyDeepWorkHours + 1
     const date = new Date().toISOString().substring(0, 10);
-    updateDeepWorkHours({ variables: { date, hours: newHours } });
+    updateDeepWorkHours({ variables: { date, hours: newHours } }); // We pass the date and the hours 
   };
 
   return (
