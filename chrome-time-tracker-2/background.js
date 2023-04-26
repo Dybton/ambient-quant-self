@@ -5,10 +5,17 @@ const targetWebsites = [
 ];
 let activeWebsite = null;
 let timeSpent = {
-  'facebook.com': 0,
+  'facebook.com': 0, 
   'twitter.com': 0,
   'linkedin.com': 0,
 };
+
+const dev = false;
+
+if (dev) {
+  // we start by resetting the timeSpent object
+  resetTimeSpentIfNeeded();
+}
 
 function getCurrentWebsite(url) {
   const urlObject = new URL(url);
@@ -86,14 +93,18 @@ chrome.windows.onFocusChanged.addListener((windowId) => {
 });
 
 // Load the previous data from storage
-chrome.storage.local.get(['timeSpent'], (result) => {
-  if (result.timeSpent) {
-    timeSpent = result.timeSpent;
-  }
-  resetTimeSpentIfNeeded();
-});
+async () => {
+  await chrome.storage.local.get(['timeSpent'], (result) => {
+    if (result.timeSpent) {
+      timeSpent = result.timeSpent;
+    }
+    resetTimeSpentIfNeeded();
+    sendDataToServer(timeSpent);
+  });
+}
 
 function sendDataToServer(timeSpent) {
+  console.log('Sending data to server:', timeSpent);
   fetch('http://localhost:4000/api/website-time', {
     method: 'POST',
     headers: {
@@ -102,12 +113,14 @@ function sendDataToServer(timeSpent) {
     body: JSON.stringify(timeSpent),
   })
     .then((response) => response.text())
-    .then((responseText) => console.log(responseText))
+    .then((responseText) => console.log('Server response:', responseText))
     .catch((error) => console.error('Error:', error));
 }
 
-// Check the active website and update time spent every second
+sendDataToServer(timeSpent);
+
 setInterval(checkActiveWebsite, 1000);
+
 setInterval(() => {
   sendDataToServer(timeSpent);
-}, 36000);
+}, 36000); 
