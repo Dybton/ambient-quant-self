@@ -158,7 +158,6 @@ const updateDeepWorkHours = async (_, { date, hours }) => {
   return { date, deepWorkHours: existingData ? existingData.deepWorkHours : hours };
 };
 
-// Todo: Make this return both monthly and weekly totalRunning distance
 const fetchRunData = async ({ start, end }: FetchRunDataInput): Promise<number | null> => {
 
   const calculateTotalRunningDistance = function(workouts: { data: WorkoutData[] }): number {
@@ -181,7 +180,29 @@ const fetchRunData = async ({ start, end }: FetchRunDataInput): Promise<number |
 };
 
 const fetchTimeSpent = async (context): Promise<{ website: string; time: number }[]> => {
-  return Object.entries(context.timeSpentData).map(([website, time]) => ({ website, time: time as number }));
+  try {
+
+    console.log('fetchTimeSpent context:', context)
+
+    if (!context || !context.timeSpentData) {
+      console.error('Error: Invalid context or missing timeSpentData');
+      return [];
+    }
+
+    const result = Object.entries(context.timeSpentData).map(([website, time]) => {
+      if (typeof time !== 'number') {
+        console.warn(`Warning: Time is not a number for ${website}, using 0 as default value`);
+        return { website, time: 0 };
+      }
+      return { website, time };
+    });
+
+    console.log('fetchTimeSpent result:', result);
+    return result;
+  } catch (error) {
+    console.error('Error in fetchTimeSpent:', error);
+    return [];
+  }
 };
 
 export const resolvers = {
