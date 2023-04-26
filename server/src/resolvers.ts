@@ -39,6 +39,9 @@ type SleepDurationData = {
 type DayOfWeekString = 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat' | 'Sun';
 
 const { start, end } = getDays();
+const startOfMonthDate = startOfMonth(new Date(start)).toISOString().split('T')[0];
+const endOfMonthDate = endOfMonth(new Date(start)).toISOString().split('T')[0];
+
 const client = new Client(accessToken);
 
 const reduceSleepData = (data): SleepData[] => {
@@ -166,33 +169,16 @@ const fetchRunData = async ({ start, end }: FetchRunDataInput): Promise<number |
   };
 
   try {
-    const today = new Date();
-    const startOfMonthDate = startOfMonth(today);
-    const endOfMonthDate = endOfMonth(today);
+    const workouts = await client.getWorkout({ start_date: start, end_date: end });
+    const runningDistance = calculateTotalRunningDistance(workouts);
 
-    const startOfMonthString = startOfMonthDate.toISOString().split('T')[0];
-    const endOfMonthString = endOfMonthDate.toISOString().split('T')[0];
-
-    try {
-      const [weeklyWorkouts, monthlyWorkouts] = await Promise.all([
-        client.getWorkout({ start_date: start, end_date: end }),
-        client.getWorkout({ start_date: startOfMonthString, end_date: endOfMonthString }),
-      ]);
-
-      const weeklyRunningDistance = calculateTotalRunningDistance(weeklyWorkouts);
-      const monthlyRunningDistance = calculateTotalRunningDistance(monthlyWorkouts);
-
-      return Number((Math.ceil(weeklyRunningDistance) / 1000).toFixed(1));
-    } catch (error) {
-      console.error('Error fetching workout data:', error);
-      return null;
-    }
+    return Number((Math.ceil(runningDistance) / 1000).toFixed(1));
+    
   } catch (error) {
-    console.error('Error processing dates:', error);
+    console.error('Error fetching workout data:', error);
     return null;
   }
 };
-
 
 const fetchTimeSpent = async (context): Promise<{ website: string; time: number }[]> => {
   return Object.entries(context.timeSpentData).map(([website, time]) => ({ website, time: time as number }));
