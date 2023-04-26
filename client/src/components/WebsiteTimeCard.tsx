@@ -48,7 +48,7 @@ const WebsiteTimeCard: React.FC = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  const maxTime = 30;
+  const maxTime = 160;
   const totalTime = data.timeSpent.reduce((acc: number, curr: { time: number }) => acc + curr.time, 0);
   const totalTimeInMinutes = convertSecondsToMinutes(totalTime)
 
