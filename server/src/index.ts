@@ -7,7 +7,6 @@ import { resolvers } from './resolvers';
 const app = express();
 const port = 4000;
 
-// Global variable to store time spent data
 let timeSpentData = {};
 
 app.use(cors());
