@@ -4,7 +4,7 @@ process.env.TZ = 'Europe/Copenhagen';
 import { getDays, getDateFromWeekDay} from './utilities';
 import fs from 'fs';
 import path from 'path';
-
+import { startOfMonth, endOfMonth } from 'date-fns';
 
 // This is for the raw data from the API
 interface SleepData {
@@ -156,19 +156,43 @@ const updateDeepWorkHours = async (_, { date, hours }) => {
 };
 
 // Todo: Make this return both monthly and weekly totalRunning distance
-const fetchRunData = async({ start, end }: FetchRunDataInput): Promise<number | null> => {
-  try {
-    const workout = await client.getWorkout({ start_date: start, end_date: end }); 
-    const totalRunningDist = workout.data
+const fetchRunData = async ({ start, end }: FetchRunDataInput): Promise<number | null> => {
+
+  const calculateTotalRunningDistance = function(workouts: { data: WorkoutData[] }): number {
+    const totalRunningDist = workouts.data
       .filter((day: WorkoutData) => day.activity === 'walking' || day.activity === 'running')
       .reduce((total: number, day: WorkoutData) => total + day.distance, 0);
-    
-    return Number((Math.ceil(totalRunningDist) / 1000).toFixed(1));
+    return totalRunningDist;
+  };
+
+  try {
+    const today = new Date();
+    const startOfMonthDate = startOfMonth(today);
+    const endOfMonthDate = endOfMonth(today);
+
+    const startOfMonthString = startOfMonthDate.toISOString().split('T')[0];
+    const endOfMonthString = endOfMonthDate.toISOString().split('T')[0];
+
+    try {
+      const [weeklyWorkouts, monthlyWorkouts] = await Promise.all([
+        client.getWorkout({ start_date: start, end_date: end }),
+        client.getWorkout({ start_date: startOfMonthString, end_date: endOfMonthString }),
+      ]);
+
+      const weeklyRunningDistance = calculateTotalRunningDistance(weeklyWorkouts);
+      const monthlyRunningDistance = calculateTotalRunningDistance(monthlyWorkouts);
+
+      return Number((Math.ceil(weeklyRunningDistance) / 1000).toFixed(1));
+    } catch (error) {
+      console.error('Error fetching workout data:', error);
+      return null;
+    }
   } catch (error) {
-    console.error('Error fetching running data:', error);
+    console.error('Error processing dates:', error);
     return null;
   }
-}
+};
+
 
 const fetchTimeSpent = async (context): Promise<{ website: string; time: number }[]> => {
   return Object.entries(context.timeSpentData).map(([website, time]) => ({ website, time: time as number }));
