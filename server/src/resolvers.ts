@@ -171,7 +171,7 @@ const fetchRunData = async ({ start, end }: FetchRunDataInput): Promise<number |
   try {
     const workouts = await client.getWorkout({ start_date: start, end_date: end });
     const runningDistance = calculateTotalRunningDistance(workouts);
-
+    
     return Number((Math.ceil(runningDistance) / 1000).toFixed(1));
     
   } catch (error) {
@@ -187,21 +187,28 @@ const fetchTimeSpent = async (context): Promise<{ website: string; time: number 
 export const resolvers = {
   Query: {
     sleepDuration: async () => await fetchSleepData({ start, end }),
+
     runDistance: async () => {
-      return { weeklyDistance: await fetchRunData({ start, end })};
+      const [weeklyDistance, monthlyDistance] = await Promise.all([
+        fetchRunData({ start, end }),
+        fetchRunData({ start: startOfMonthDate, end: endOfMonthDate }),
+      ])
+      return { weeklyDistance, monthlyDistance};
     },
+
     timeSpent: async (_, __, context) => {
       return await fetchTimeSpent(context);
     },
+
     deepWorkHours: () =>  fetchtDeepWorkHours()
     },
+
   Mutation: {
   updateDeepWorkHours: (_, { date, hours }) => updateDeepWorkHours(_, { date, hours }),
 }
 
   };
   
-
   const tests = {
     mergeSleepData,
     reduceSleepData
