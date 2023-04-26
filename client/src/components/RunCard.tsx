@@ -8,7 +8,7 @@ import { useQuery } from '@apollo/client';
 export const RUN_DISTANCE_QUERY = gql`
   query {
     runDistance {
-      distance
+      weeklyDistance
     }
   }
 `;
@@ -21,11 +21,11 @@ const RunCard: React.FC = () => {
 
   const { runDistance } = data;
 
-  const weeklyRunGoal = 30;
+  const weeklyRunGoal = 20;
   const monthlyGoal = weeklyRunGoal * 4;
 
-  const weeklyPercentage = Math.round((runDistance.distance / weeklyRunGoal) * 10000) / 100;
-  const monthlyPercentage = Math.round((runDistance.distance / monthlyGoal) * 1000) / 10;
+  const weeklyPercentage = Math.round((runDistance.weeklyDistance / weeklyRunGoal) * 10000) / 100;
+  const monthlyPercentage = Math.round((runDistance.weeklyDistance / monthlyGoal) * 1000) / 10;
 
   return (
     <div className="shadow-lg w-full rounded-3xl h-3/6">
@@ -35,7 +35,7 @@ const RunCard: React.FC = () => {
       <div className='flex h-4/6'>
       <div className='h-full w-3/6 flex flex-col'>
         <div className='w-full h-3/6 flex items-center'>
-          <p className='font-bold text-5xl ml-8'> {runDistance.distance}/{weeklyRunGoal}</p>
+          <p className='font-bold text-5xl ml-8'> {runDistance.weeklyDistance}/{weeklyRunGoal}</p>
         </div>
         <div className='w-full h-3/6 flex flex-col justify-center'>
           <div className='flex items-center ml-8'>

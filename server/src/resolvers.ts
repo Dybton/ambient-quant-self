@@ -202,8 +202,9 @@ export const resolvers = {
   Query: {
     sleepDuration: async () => await fetchSleepData({ start, end }),
     runDistance: async () => {
-      const distance = await fetchRunData({ start, end });
-      return { distance };
+      // const distance = await fetchRunData({ start, end });
+      // return { distance };
+      return { weeklyDistance: await fetchRunData({ start, end }) };
     },
     timeSpent: async (_, __, context) => {
       return await fetchTimeSpent(context);

@@ -13,7 +13,7 @@ export const typeDefs = gql`
   }
 
   type RunDistance {
-    distance: Float
+    weeklyDistance: Float
   }
 
   type TimeSpent {
