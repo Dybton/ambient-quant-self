@@ -9,6 +9,7 @@ export const RUN_DISTANCE_QUERY = gql`
   query {
     runDistance {
       weeklyDistance
+      monthlyDistance
     }
   }
 `;
@@ -19,13 +20,13 @@ const RunCard: React.FC = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  const { runDistance } = data;
+  const { weeklyDistance, monthlyDistance } = data.runDistance;
 
   const weeklyRunGoal = 20;
   const monthlyGoal = weeklyRunGoal * 4;
 
-  const weeklyPercentage = Math.round((runDistance.weeklyDistance / weeklyRunGoal) * 10000) / 100;
-  const monthlyPercentage = Math.round((runDistance.weeklyDistance / monthlyGoal) * 1000) / 10;
+  const weeklyPercentage = Math.round((weeklyDistance / weeklyRunGoal) * 10000) / 100;
+  const monthlyPercentage = Math.round((monthlyDistance / monthlyGoal) * 1000) / 10;
 
   return (
     <div className="shadow-lg w-full rounded-3xl h-3/6">
@@ -35,7 +36,7 @@ const RunCard: React.FC = () => {
       <div className='flex h-4/6'>
       <div className='h-full w-3/6 flex flex-col'>
         <div className='w-full h-3/6 flex items-center'>
-          <p className='font-bold text-5xl ml-8'> {runDistance.weeklyDistance}/{weeklyRunGoal}</p>
+          <p className='font-bold text-5xl ml-8'> {weeklyDistance}/{weeklyRunGoal}</p>
         </div>
         <div className='w-full h-3/6 flex flex-col justify-center'>
           <div className='flex items-center ml-8'>
