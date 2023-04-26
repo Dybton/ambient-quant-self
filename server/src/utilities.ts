@@ -12,7 +12,7 @@
   };
   
 
-  export const getDateFromWeekDay =(weekday) => {
+  export const getDateFromWeekDay = (weekday : string) => {
     const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
     const inputDayIndex = dayNames.findIndex(day => day.toLowerCase() === weekday.toLowerCase());
   

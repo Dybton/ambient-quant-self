@@ -4,28 +4,29 @@ process.env.TZ = 'Europe/Copenhagen';
 import { getDays, getDateFromWeekDay} from './utilities';
 import fs from 'fs';
 import path from 'path';
-import { startOfMonth, endOfMonth } from 'date-fns';
+import { startOfMonth, endOfMonth, startOfISOWeek } from 'date-fns';
 
 // This is for the raw data from the API
-interface SleepData {
+type SleepData = {
   day: string;
   total_sleep_duration: number;
-}
+};
 
-interface SleepDataInput {
+type SleepDataInput = {
   start: string;
   end: string;
-}
+};
 
-interface WorkoutData {
+type WorkoutData = {
   activity: string;
   distance: number;
-}
+};
 
-interface FetchRunDataInput {
+type FetchRunDataInput = {
   start: string;
   end: string;
-}
+};
+
 
 type SleepDurationData = {
   date: string;
@@ -36,11 +37,16 @@ type SleepDurationData = {
   };
 };
 
+type Context = {
+  timeSpentData: Record<string, number>;
+};
+
+
 type DayOfWeekString = 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat' | 'Sun';
 
 const { start, end } = getDays();
-const startOfMonthDate = startOfMonth(new Date(start)).toISOString().split('T')[0];
-const endOfMonthDate = endOfMonth(new Date(start)).toISOString().split('T')[0];
+const startOfMonthDate = startOfMonth(new Date()).toISOString().split('T')[0];
+const endOfMonthDate = endOfMonth(new Date()).toISOString().split('T')[0];
 
 const client = new Client(accessToken);
 
@@ -160,13 +166,13 @@ const updateDeepWorkHours = async (_, { date, hours }) => {
 
 const fetchRunData = async ({ start, end }: FetchRunDataInput): Promise<number | null> => {
 
-  const calculateTotalRunningDistance = function(workouts: { data: WorkoutData[] }): number {
+  const calculateTotalRunningDistance = (workouts: { data: WorkoutData[] }) : number => {
     const totalRunningDist = workouts.data
       .filter((day: WorkoutData) => day.activity === 'walking' || day.activity === 'running')
       .reduce((total: number, day: WorkoutData) => total + day.distance, 0);
     return totalRunningDist;
-  };
-
+  }
+  
   try {
     const workouts = await client.getWorkout({ start_date: start, end_date: end });
     const runningDistance = calculateTotalRunningDistance(workouts);
@@ -179,7 +185,7 @@ const fetchRunData = async ({ start, end }: FetchRunDataInput): Promise<number |
   }
 };
 
-const fetchTimeSpent = async (context): Promise<{ website: string; time: number }[]> => {
+const fetchTimeSpent = async (context: Context): Promise<{ website: string; time: number }[]> => {
   try {
 
     console.log('fetchTimeSpent context:', context)
