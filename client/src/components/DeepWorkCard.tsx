@@ -6,15 +6,14 @@ import HorizontalProgressBar from './ProgressBars/HorizontalProgressBar';
 import { gql, useMutation } from '@apollo/client';
 import { useQuery } from '@apollo/client';
 
-interface DeepWork {
-  __typename: string;
+type DeepWork = {
   date: string;
   deepWorkHours: number;
-}
+};
 
-interface DeepWorkHoursData {
+type DeepWorkHoursData = {
   deepWorkHours: DeepWork[];
-}
+};
 
 export const DEEP_WORK_QUERY = gql`
   query {
@@ -34,12 +33,12 @@ const UPDATE_DEEP_WORK_HOURS = gql`
   }
 `;
 
-
+// Function takes array of Deepwork objects and returns the sum of the deepwork hours
 const sumWeeklyDeepWorkHours = (data: DeepWorkHoursData): number => {
   const output = data.deepWorkHours.reduce((sum, item) => sum + item.deepWorkHours, 0);
   console.log("data", data.deepWorkHours)
   console.log("output", output)
-  return output
+  return data.deepWorkHours.reduce((sum, item) => sum + item.deepWorkHours, 0);
 };
   
 const DeepWorkCard: React.FC = () => {
@@ -49,8 +48,8 @@ const DeepWorkCard: React.FC = () => {
 
   const [updateDeepWorkHours] = useMutation(UPDATE_DEEP_WORK_HOURS, {
     onCompleted: (data) => {
-      // Update the local state with the new data
-      setWeeklyDeepWorkHours(sumWeeklyDeepWorkHours({ deepWorkHours: [data.updateDeepWorkHours] }));
+      const summedUpdatedDeepworkHours = sumWeeklyDeepWorkHours({ deepWorkHours: [data.updateDeepWorkHours] });
+      setWeeklyDeepWorkHours(summedUpdatedDeepworkHours);
     },
   });
     
