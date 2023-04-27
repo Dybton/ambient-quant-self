@@ -5,12 +5,14 @@ import VerticalProgressBar from './ProgressBars/VerticalProgressBar';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client';
 
-const calculateSleepPercentage = (hours: number, minutes: number) => {
-  const totalMinutes = hours * 60 + minutes;
-  const totalMinutesInDay = 9 * 60;
-  const percentage = (totalMinutes / totalMinutesInDay) * 100;
-  return percentage;
-}
+type SleepDuration = {
+  date: string;
+  day: string;
+  duration: {
+    hours: number;
+    minutes: number;
+  };
+};
 
 const SLEEP_DURATION_QUERY = gql`
   query {
@@ -25,14 +27,12 @@ const SLEEP_DURATION_QUERY = gql`
   }
 `;
 
-type SleepDuration = {
-  date: string;
-  day: string;
-  duration: {
-    hours: number;
-    minutes: number;
-  };
-};
+const calculateSleepPercentage = (hours: number, minutes: number) => {
+  const totalMinutes = hours * 60 + minutes;
+  const totalMinutesInDay = 9 * 60;
+  const percentage = (totalMinutes / totalMinutesInDay) * 100;
+  return percentage;
+}
 
 const SleepCard: React.FC = () => {
   const { loading, error, data } = useQuery(SLEEP_DURATION_QUERY);
