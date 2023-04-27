@@ -42,6 +42,8 @@ const convertSecondsToMinutes = (seconds: number | undefined) => {
   return Math.round(seconds / 60);
 }
 
+const maxTime = 160;
+
 const WebsiteTimeCard: React.FC = () => {
   const { loading, error, data} = useQuery(WEBSITE_TIME_QUERY);
 
@@ -80,7 +82,8 @@ type WebSiteSectionProps = {
 };
 
 const getWebsitePercentage = (time: number | undefined) => {
-  const totalAllowedMinutesInDay = 10 * 60;
+  const totalAllowedMinutesInDay = (maxTime * 60) / 3
+
   if(!time) return 0;
   const percentage = (time / totalAllowedMinutesInDay) * 100;
   return percentage;
