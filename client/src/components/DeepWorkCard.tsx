@@ -74,7 +74,7 @@ const DeepWorkCard: React.FC = () => {
   };
 
   return (
-    <div className="shadow-lg w-full rounded-3xl h-2/5 mt-14">
+    <div className="shadow-lg w-full rounded-3xl h-3/5 xl:h-2/5 mt-14 ">
       <div className='flex-row h-2/6 w-full'>
         <CardHeader title={{ text: "Hours of Deep Work", size: "text-base" }} icon={<ClockIcon/>}/>
       </div>

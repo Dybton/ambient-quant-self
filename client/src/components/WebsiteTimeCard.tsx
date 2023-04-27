@@ -50,7 +50,6 @@ const WebsiteTimeCard: React.FC = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  const maxTime = 160;
   const totalTime = data.timeSpent.reduce((acc: number, curr: { time: number }) => acc + curr.time, 0);
   const totalTimeInMinutes = convertSecondsToMinutes(totalTime)
 
@@ -59,7 +58,7 @@ const WebsiteTimeCard: React.FC = () => {
   }
 
   return (
-    <div className="shadow-lg w-full rounded-3xl h-3/5">
+    <div className="shadow-lg w-full rounded-3xl h-4/5 xl:h-3/5" >
       <div className='flex-row h-1/6 w-full'>
         <CardHeader title={{ text: "Minutes on Websites", size: "text-base" }} icon={<WebsitesIcon/>}/>
       </div>
