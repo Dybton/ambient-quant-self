@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { getDays } from '../utilities';
+import { getWeekStartAndEnd } from '../utilities';
 
 const databasePath = "../../../database/deepwork.json";
 
@@ -21,7 +21,7 @@ const readData = () => {
 
   const isCurrentWeek = (dateString : string) => {
     const date = new Date(dateString);
-    const { start, end } = getDays();
+    const { start, end } = getWeekStartAndEnd();
   
     const currentWeekStart = new Date(start);
     const currentWeekEnd = new Date(end);

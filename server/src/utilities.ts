@@ -1,6 +1,6 @@
 
 
-  export const getDays = (): { start: string, end: string } => {
+  export const getWeekStartAndEnd = (): { start: string, end: string } => {
 
     const lastMondayString = getDateFromWeekDay("Mon");
     const nextSundayString = getDateFromWeekDay("Sun");
