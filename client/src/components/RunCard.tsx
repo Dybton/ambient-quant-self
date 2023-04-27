@@ -25,8 +25,8 @@ const RunCard: React.FC = () => {
   const weeklyRunGoal = 20;
   const monthlyGoal = weeklyRunGoal * 4;
 
-  const weeklyPercentage = Math.round((weeklyDistance / weeklyRunGoal) * 10000) / 100;
-  const monthlyPercentage = Math.round((monthlyDistance / monthlyGoal) * 1000) / 10;
+  const weeklyPercentage = Number((weeklyDistance / weeklyRunGoal * 100).toFixed(1));
+  const monthlyPercentage = Number((monthlyDistance / monthlyGoal * 100).toFixed(1));
 
   return (
     <div className="shadow-lg w-full rounded-3xl h-3/6">
