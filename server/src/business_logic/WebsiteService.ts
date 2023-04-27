@@ -1,8 +1,5 @@
-type Context = {
-    timeSpentData: Record<string, number>;
-};
 
-export const fetchTimeSpent = async (context: Context): Promise<{ website: string; time: number }[]> => {
+export const fetchTimeSpent = async (context): Promise<{ website: string; time: number }[]> => {
     try {
   
       console.log('fetchTimeSpent context:', context)
