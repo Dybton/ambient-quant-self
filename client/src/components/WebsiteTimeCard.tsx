@@ -66,8 +66,8 @@ const WebsiteTimeCard: React.FC = () => {
         <div className='ml-8 mb-2 w-full'>
           <p className='font-bold text-3xl'>{totalTimeInMinutes}/{maxTime}</p>
         </div>
-        {data.timeSpent.map(({ website, time }: { website: string; time: number }) => (
-          <WebSiteSection key={website} website={website as Website} time={time} />
+        {data.timeSpent.map(({ website, time }: { website: Website; time: number }) => (
+          <WebSiteSection key={website} website={website} time={time} />
         ))}
       </div>
     </div>
@@ -80,16 +80,16 @@ type WebSiteSectionProps = {
 };
 
 const getWebsitePercentage = (time: number | undefined) => {
-  const totalMinutesInDay = 10 * 60;
+  const totalAllowedMinutesInDay = 10 * 60;
   if(!time) return 0;
-  const percentage = (time / totalMinutesInDay) * 100;
+  const percentage = (time / totalAllowedMinutesInDay) * 100;
   return percentage;
 }
 
 const WebSiteSection: React.FC<WebSiteSectionProps> = ({ website, time }) => {
   
   const websiteMinutes = convertSecondsToMinutes(time);
-  const websiteSeconds = time ? time % 60 : 0;
+  const websiteSeconds = time ? time % 60 : 0; // returns remainder of time divided by 60
   const websiteTime = time ? `${websiteMinutes}m ${websiteSeconds}s` : "No data"
 
   return (
