@@ -3,7 +3,9 @@ const targetWebsites = [
   'twitter.com',
   'linkedin.com',
 ];
+
 let activeWebsite = null;
+
 let timeSpent = {
   'facebook.com': 0, 
   'twitter.com': 0,
@@ -44,8 +46,8 @@ function updateSpentTime(currentWebsite) {
 
 function resetTimeSpentIfNeeded() {
   const today = new Date();
-  const dayOfWeek = today.getDay(); // 0 is Sunday, 1 is Monday, ..., 6 is Saturday
-
+  const dayOfWeek = today.getDay();
+  
   chrome.storage.local.get(['lastResetDate'], (result) => {
     const lastResetDate = result.lastResetDate ? new Date(result.lastResetDate) : null;
 
@@ -123,4 +125,4 @@ setInterval(checkActiveWebsite, 1000);
 
 setInterval(() => {
   sendDataToServer(timeSpent);
-}, 36000); 
+}, 3600); 
