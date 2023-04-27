@@ -1,21 +1,10 @@
-import Client from "oura-cloud-api";
-const accessToken = 'CWDIVW2X5NB4CPSFV73IEKMZBJUATRKW' // todo: Place this in env file
 process.env.TZ = 'Europe/Copenhagen';
 import { getDays, getDateFromWeekDay} from './utilities';
 import fs from 'fs';
 import path from 'path';
-import { startOfMonth, endOfMonth, startOfISOWeek } from 'date-fns';
-
-// This is for the raw data from the API
-type SleepData = {
-  day: string;
-  total_sleep_duration: number;
-};
-
-type SleepDataInput = {
-  start: string;
-  end: string;
-};
+import { startOfMonth, endOfMonth } from 'date-fns';
+import { ouraClient } from "./index";
+import { fetchSleepData } from './business_logic/SleepService';
 
 type WorkoutData = {
   activity: string;
@@ -28,93 +17,14 @@ type FetchRunDataInput = {
 };
 
 
-type SleepDurationData = {
-  date: string;
-  day: string;
-  duration: {
-    hours: number;
-    minutes: number;
-  };
-};
-
 type Context = {
   timeSpentData: Record<string, number>;
 };
-
-
-type DayOfWeekString = 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat' | 'Sun';
 
 const { start, end } = getDays();
 const startOfMonthDate = startOfMonth(new Date()).toISOString().split('T')[0];
 const endOfMonthDate = endOfMonth(new Date()).toISOString().split('T')[0];
 
-const client = new Client(accessToken);
-
-const reduceSleepData = (data): SleepData[] => {
-  const sleepDataMap = new Map<string, SleepData>();
-
-  for (const rawData of data) {
-    const { day, total_sleep_duration } = rawData;
-
-    if (!sleepDataMap.has(day)) {
-      sleepDataMap.set(day, { day, total_sleep_duration });
-    } else {
-      const existingData = sleepDataMap.get(day)!;
-      existingData.total_sleep_duration += total_sleep_duration;
-      sleepDataMap.set(day, existingData);
-    }
-  }
-  return Array.from(sleepDataMap.values());
-};
-
-const mergeSleepData = (sleepDataArray: SleepData[], sleepDurationDataArray: SleepDurationData[]): SleepDurationData[] => {
-  const mergedData: SleepDurationData[] = sleepDurationDataArray.map(sleepDurationData => {
-    const sleepData = sleepDataArray.find(sleep => sleep.day === sleepDurationData.date);
-
-    const duration = sleepData
-      ? {
-          hours: Math.floor(sleepData.total_sleep_duration / 3600),
-          minutes: Math.floor((sleepData.total_sleep_duration % 3600) / 60),
-        }
-      : sleepDurationData.duration;
-
-    return {
-      date: sleepDurationData.date,
-      day: sleepDurationData.day,
-      duration,
-    };
-  });
-
-  return mergedData;
-}
-
-
-const fetchSleepData = async ({ start, end }: SleepDataInput): Promise<SleepDurationData[] | null> => {
-  
-    const daysOfTheWeek : DayOfWeekString[] = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    const sleepDurationArray = [];
-  
-    daysOfTheWeek.map(day => {
-      const sleepObj : SleepDurationData = {
-        date: getDateFromWeekDay(day),
-        day: day,
-        duration: { hours: 0, minutes: 0 }
-      }
-      sleepDurationArray.push(sleepObj)
-    })
-
-  try {
-    const sleep = await client.getSleep({ start_date: start, end_date: end });
-    const reducedSleepData = reduceSleepData(sleep.data)
-    const mergedSleepData = mergeSleepData(reducedSleepData, sleepDurationArray)
-
-    return mergedSleepData;
-
-  } catch (error) {
-    console.error('Error fetching sleep data:', error);
-    return null;
-  }
-}
 
 // Read data from the JSON file
 const readData = () => {
@@ -174,7 +84,7 @@ const fetchRunData = async ({ start, end }: FetchRunDataInput): Promise<number |
   }
   
   try {
-    const workouts = await client.getWorkout({ start_date: start, end_date: end });
+    const workouts = await ouraClient.getWorkout({ start_date: start, end_date: end });
     const runningDistance = calculateTotalRunningDistance(workouts);
     
     return Number((Math.ceil(runningDistance) / 1000).toFixed(1));
@@ -235,10 +145,3 @@ export const resolvers = {
 }
 
   };
-  
-  const tests = {
-    mergeSleepData,
-    reduceSleepData
-  };
-
-  export { tests };

@@ -1,8 +1,13 @@
 import express from 'express';
+import Client from "oura-cloud-api";
 import { ApolloServer } from 'apollo-server-express';
 import cors from 'cors';
 import { typeDefs } from './schema';
 import { resolvers } from './resolvers';
+
+const accessToken = 'CWDIVW2X5NB4CPSFV73IEKMZBJUATRKW' // todo: Place this in env file
+
+export const ouraClient = new Client(accessToken);
 
 const app = express();
 const port = 4000;
@@ -11,6 +16,7 @@ let timeSpentData = {};
 
 app.use(cors());
 app.use(express.json());
+
 
 // Route to handle incoming POST requests from the Chrome extension
 app.post('/api/website-time', (req, res) => {

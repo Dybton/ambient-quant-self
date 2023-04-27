@@ -1,4 +1,4 @@
-import { tests} from './resolvers';
+import {sleepTests} from './business_logic/SleepService';
 
 describe('reduceSleepData', () => {
     it('merges the total sleep duration for duplicate days', () => {
@@ -34,7 +34,7 @@ describe('reduceSleepData', () => {
         },
       ];
   
-      const result = tests.reduceSleepData(rawData);
+      const result = sleepTests.reduceSleepData(rawData);
   
       expect(result).toEqual(expectedSleepData);
     });
@@ -67,7 +67,7 @@ describe('reduceSleepData', () => {
         { date: '2023-03-26', day: 'Sun', duration: { hours: 0, minutes: 0 } },
       ];
     
-      const result = tests.mergeSleepData(sleepDataArray, sleepDurationDataArray);
+      const result = sleepTests.mergeSleepData(sleepDataArray, sleepDurationDataArray);
       expect(result).toEqual(expectedResult);
     });    
 });
