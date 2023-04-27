@@ -12,6 +12,7 @@ let timeSpent = {
 
 let focusedWebsite = null; // the website that is currently focused
 
+// Get target website from URL
 const getCurrentTargetWebsite = (url) => {
   const urlObject = new URL(url);
   const hostname = urlObject.hostname;
@@ -24,6 +25,7 @@ const getCurrentTargetWebsite = (url) => {
   return null;
 };
 
+// Update focusedWebsite and timeSpent
 // gets the currently focused tab's website and updates the active/target website if changed
 // also updates the time spent on the website
 const checkfocusedWebsite = () => {
@@ -42,6 +44,7 @@ const checkfocusedWebsite = () => {
   });
 };
 
+// Increment time spent on the focused website
 const updateSpentTime = (website) => {
   if (website) {
     if (isNaN(timeSpent[website])) {
@@ -53,6 +56,7 @@ const updateSpentTime = (website) => {
   }
 };
 
+// Reset time spent on websites weekly
 const resetTimeSpentIfNeeded = () => {
   const today = new Date();
   const dayOfWeek = today.getDay();
@@ -74,6 +78,8 @@ const resetTimeSpentIfNeeded = () => {
   });
 };
 
+// Event Listeners
+
 // triggers when tab is updated (refresh / new tab)
 chrome.tabs.onUpdated.addListener((changeInfo) => {
   if (changeInfo.status === 'complete') { // when tab is loaded
@@ -81,7 +87,7 @@ chrome.tabs.onUpdated.addListener((changeInfo) => {
   }
 });
 
-// triggers when tab is activated
+// triggers when tab is activated (switched to)
 chrome.tabs.onActivated.addListener(() => {
   checkfocusedWebsite();
 });
@@ -96,7 +102,7 @@ chrome.windows.onFocusChanged.addListener((windowId) => {
   }
 });
 
-// gets the timeSpent from storage and sends it to the server
+// Initialize timeSpent and send data to the server
 (async () => {
   await chrome.storage.local.get(['timeSpent'], (result) => {
     if (result.timeSpent) {
