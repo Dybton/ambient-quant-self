@@ -10,7 +10,7 @@ type DeepWork = {
   date: string;
   deepWorkHours: number;
 };
-
+  
 type DeepWorkHoursData = {
   deepWorkHours: DeepWork[];
 };
@@ -35,15 +35,13 @@ const UPDATE_DEEP_WORK_HOURS = gql`
 
 // Function takes array of Deepwork objects and returns the sum of the deepwork hours
 const sumWeeklyDeepWorkHours = (data: DeepWorkHoursData): number => {
-  const output = data.deepWorkHours.reduce((sum, item) => sum + item.deepWorkHours, 0);
-  console.log("data", data.deepWorkHours)
-  console.log("output", output)
   return data.deepWorkHours.reduce((sum, item) => sum + item.deepWorkHours, 0);
 };
   
 const DeepWorkCard: React.FC = () => {
   const [weeklyDeepWorkHours, setWeeklyDeepWorkHours] = React.useState(0);
 
+  const weeklyDeepworkGoal = 30;
   const { loading, error, data} = useQuery(DEEP_WORK_QUERY);
 
   const [updateDeepWorkHours] = useMutation(UPDATE_DEEP_WORK_HOURS, {
@@ -62,7 +60,6 @@ const DeepWorkCard: React.FC = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  const weeklyDeepworkGoal = 30;
   const calculatePercentage = (hours: number) => {
     return (hours / 30) * 100; //
   };
