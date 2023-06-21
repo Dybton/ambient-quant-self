@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDateFromWeekDay = exports.getDays = void 0;
-const getDays = () => {
+exports.getDateFromWeekDay = exports.getWeekStartAndEnd = void 0;
+const getWeekStartAndEnd = () => {
     const lastMondayString = (0, exports.getDateFromWeekDay)("Mon");
     const nextSundayString = (0, exports.getDateFromWeekDay)("Sun");
     return {
@@ -9,7 +9,7 @@ const getDays = () => {
         end: nextSundayString
     };
 };
-exports.getDays = getDays;
+exports.getWeekStartAndEnd = getWeekStartAndEnd;
 const getDateFromWeekDay = (weekday) => {
     const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
     const inputDayIndex = dayNames.findIndex(day => day.toLowerCase() === weekday.toLowerCase());

@@ -44,14 +44,14 @@ export const updateDeepWorkHours = async (_: unknown, { date, hours }: { date: s
 ): Promise<DeepWorkEntry> => {
   const deepWorkHoursData = readData();
 
-  const existingData = deepWorkHoursData.find((data) => data.date === date);
-  if (existingData) {
-    existingData.deepWorkHours = hours;
+  const existingDate = deepWorkHoursData.find((data) => data.date === date);
+  if (existingDate) {
+    existingDate.deepWorkHours = hours;
   } else {
     deepWorkHoursData.push({ date, deepWorkHours: hours });
   }
 
   writeData(deepWorkHoursData);
 
-  return { date, deepWorkHours: existingData ? existingData.deepWorkHours : hours };
+  return { date, deepWorkHours: existingDate ? existingDate.deepWorkHours : hours };
 };

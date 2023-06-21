@@ -1,6 +1,18 @@
 [
-    {
-      "date": "2023-04-23",
-      "deepWorkHours": 20
-    }
-  ]
+  {
+    "date": "2023-04-23",
+    "deepWorkHours": 9
+  },
+  {
+    "date": "2023-04-27",
+    "deepWorkHours": 8
+  },
+  {
+    "date": "2023-04-28",
+    "deepWorkHours": 18
+  },
+  {
+    "date": "2023-06-13",
+    "deepWorkHours": 2
+  }
+]

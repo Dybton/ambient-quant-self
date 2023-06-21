@@ -1,6 +1,6 @@
 process.env.TZ = 'Europe/Copenhagen';
 import { getWeekStartAndEnd} from './utilities';
-import { startOfMonth, endOfMonth } from 'date-fns';
+import { startOfMonth, endOfMonth} from 'date-fns';
 import { fetchSleepData } from './business_logic/SleepService';
 import { fetchDeepWorkHours, updateDeepWorkHours } from './business_logic/DeepWorkService';
 import { fetchRunData } from './business_logic/WorkoutService';
@@ -39,7 +39,7 @@ export const resolvers = {
 
   Mutation: {
     // Update deep work hours for a specific date
-    updateDeepWorkHours: async (_, { date, hours }) => {
+    updateDeepWorkHours: async (_: unknown, { date, hours }: any) => {
       return await updateDeepWorkHours(_, { date, hours });
     },
   },

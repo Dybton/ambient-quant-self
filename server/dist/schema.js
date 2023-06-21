@@ -15,7 +15,8 @@ exports.typeDefs = (0, apollo_server_1.gql) `
   }
 
   type RunDistance {
-    distance: Float
+    weeklyDistance: Float
+    monthlyDistance: Float
   }
 
   type TimeSpent {
@@ -27,12 +28,16 @@ exports.typeDefs = (0, apollo_server_1.gql) `
     date: String!
     deepWorkHours: Int!
   }
-
+  
   type Query {
     sleepDuration: [SleepDuration!]!
     runDistance: RunDistance!
     timeSpent: [TimeSpent!]!
     deepWorkHours: [DeepWork!]!
+  }
+
+  type Mutation {
+    updateDeepWorkHours(date: String!, hours: Int!): DeepWork!
   }
 `;
 //# sourceMappingURL=schema.js.map

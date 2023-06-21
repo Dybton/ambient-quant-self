@@ -92,14 +92,14 @@ const WebSiteSection: React.FC<WebSiteSectionProps> = ({ website, time }) => {
   
   const websiteMinutes = convertSecondsToMinutes(time);
   const websiteSeconds = time ? time % 60 : 0; // returns remainder of time divided by 60
-  const websiteTime = time ? `${websiteMinutes}m ${websiteSeconds}s` : "No data"
+  const websiteTimeLabel = time ? `${websiteMinutes}m ${websiteSeconds}s` : "No data"
 
   return (
   <div className='ml-8 h-1/5 w-full mb-3'>
     <p className='font-light'>{website}</p>
     <div className='flex flex-row items-center mt-1'>
       <div className='mr-1 w-8'>{getIcon(website)}</div>
-      <HorizontalProgressBar websiteBar={true} label={websiteTime} percentage={getWebsitePercentage(time)} id={`h-${website}`} h={8} w={'4/6'} />
+      <HorizontalProgressBar websiteBar={true} label={websiteTimeLabel} percentage={getWebsitePercentage(time)} id={`h-${website}`} h={8} w={'4/6'} />
     </div>
   </div>
 )};

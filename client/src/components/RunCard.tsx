@@ -22,7 +22,7 @@ const RunCard: React.FC = () => {
 
   const { weeklyDistance, monthlyDistance } = data.runDistance;
 
-  const weeklyRunGoal = 20;
+  const weeklyRunGoal = 10;
   const monthlyGoal = weeklyRunGoal * 4;
 
   const weeklyPercentage = Number((weeklyDistance / weeklyRunGoal * 100).toFixed(1));

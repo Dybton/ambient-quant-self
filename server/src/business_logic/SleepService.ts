@@ -22,7 +22,7 @@ type SleepDurationData = {
   
 type DayOfWeekString = 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat' | 'Sun';
 
-
+// Takes an array of sleep data and reduces it to a single sleep data object per day
 const reduceSleepData = (data): SleepData[] => {
     const sleepDataMap = new Map<string, SleepData>();
   
@@ -40,6 +40,7 @@ const reduceSleepData = (data): SleepData[] => {
     return Array.from(sleepDataMap.values());
   };
 
+  // Takes an array of sleep data and an array of sleep duration data and merges them into a single array
   const mergeSleepData = (sleepDataArray: SleepData[], sleepDurationDataArray: SleepDurationData[]): SleepDurationData[] => {
     const mergedData: SleepDurationData[] = sleepDurationDataArray.map(sleepDurationData => {
       const sleepData = sleepDataArray.find(sleep => sleep.day === sleepDurationData.date);

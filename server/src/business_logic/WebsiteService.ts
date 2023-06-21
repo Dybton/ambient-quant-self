@@ -1,5 +1,5 @@
 
-export const fetchTimeSpent = async (context): Promise<{ website: string; time: number }[]> => {
+export const fetchTimeSpent = async (context : Record<string, number>): Promise<{ website: string; time: number }[]> => {
     try {
   
       console.log('fetchTimeSpent context:', context)
@@ -10,10 +10,12 @@ export const fetchTimeSpent = async (context): Promise<{ website: string; time: 
       }
   
       const result = Object.entries(context.timeSpentData).map(([website, time]) => {
+        
         if (typeof time !== 'number') {
           console.warn(`Warning: Time is not a number for ${website}, using 0 as default value`);
           return { website, time: 0 };
         }
+        console.log('website:', website, 'time:', time);
         return { website, time };
       });
   

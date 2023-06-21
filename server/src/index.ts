@@ -17,7 +17,6 @@ let timeSpentData = {};
 app.use(cors());
 app.use(express.json());
 
-
 // Route to handle incoming POST requests from the Chrome extension
 app.post('/api/website-time', (req, res) => {
   console.log('Received data from Chrome extension:', req.body);

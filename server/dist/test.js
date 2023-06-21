@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const resolvers_1 = require("./resolvers");
+const SleepService_1 = require("./business_logic/SleepService");
 describe('reduceSleepData', () => {
     it('merges the total sleep duration for duplicate days', () => {
         const rawData = [
@@ -33,7 +33,7 @@ describe('reduceSleepData', () => {
                 total_sleep_duration: 2400,
             },
         ];
-        const result = resolvers_1.tests.reduceSleepData(rawData);
+        const result = SleepService_1.sleepTests.reduceSleepData(rawData);
         expect(result).toEqual(expectedSleepData);
     });
 });
@@ -61,7 +61,7 @@ describe('mergeSleepData', () => {
             { date: '2023-03-25', day: 'Sat', duration: { hours: 0, minutes: 0 } },
             { date: '2023-03-26', day: 'Sun', duration: { hours: 0, minutes: 0 } },
         ];
-        const result = resolvers_1.tests.mergeSleepData(sleepDataArray, sleepDurationDataArray);
+        const result = SleepService_1.sleepTests.mergeSleepData(sleepDataArray, sleepDurationDataArray);
         expect(result).toEqual(expectedResult);
     });
 });

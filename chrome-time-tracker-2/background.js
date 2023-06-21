@@ -1,3 +1,4 @@
+
 const targetWebsites = [
   'facebook.com',
   'twitter.com',
@@ -26,20 +27,15 @@ const getCurrentTargetWebsite = (url) => {
 };
 
 // Update focusedWebsite and timeSpent
-// gets the currently focused tab's website and updates the active/target website if changed
-// also updates the time spent on the website
 const checkfocusedWebsite = () => {
-  // get the last focused window and it's tabs. Callback retrieves window information
   chrome.windows.getLastFocused({ populate: true }, (window) => {
-    // find the active tab in the window
     const activeTab = window.tabs.find((tab) => tab.active);
+
     const currentTargetWebsite = getCurrentTargetWebsite(activeTab.url);
 
-    // ensures focusedWebsite always holds the most recent website of the currently focused tab.
     if (currentTargetWebsite !== focusedWebsite) {
       focusedWebsite = currentTargetWebsite;
 }
-
     updateSpentTime(focusedWebsite);
   });
 };
@@ -61,17 +57,17 @@ const resetTimeSpentIfNeeded = () => {
   const today = new Date();
   const dayOfWeek = today.getDay();
   
-  // takes the result of the lastResetDate from storage
   chrome.storage.local.get(['lastResetDate'], (result) => {
-    // if there is no lastResetDate, set it to null else set it to the date
+
     const lastResetDate = result.lastResetDate ? new Date(result.lastResetDate) : null;
 
-    // if there is no lastResetDate or if the day of the week is 1 (Monday) 
-    // and the date is not the same as the lastResetDate then reset the timeSpent
+    // reset timeSpent if it's Monday and the lastResetDate is not today
+    
     if (!lastResetDate || (dayOfWeek === 1 && today.toDateString() !== lastResetDate.toDateString())) {
       for (const website in timeSpent) {
         timeSpent[website] = 0;
       }
+
       chrome.storage.local.set({ timeSpent }); // set the timeSpent to 0
       chrome.storage.local.set({ lastResetDate: today.toISOString() }); // set the lastResetDate to today
     }
@@ -80,7 +76,7 @@ const resetTimeSpentIfNeeded = () => {
 
 // Event Listeners
 
-// triggers when tab is updated (refresh / new tab)
+// triggers when tab is updated (refresh / open new tab)
 chrome.tabs.onUpdated.addListener((changeInfo) => {
   if (changeInfo.status === 'complete') { // when tab is loaded
     checkfocusedWebsite();
