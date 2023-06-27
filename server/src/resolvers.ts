@@ -1,5 +1,5 @@
 process.env.TZ = 'Europe/Copenhagen';
-import { getWeekStartAndEnd} from './utilities';
+import { getWeekStartAndEnd, getDayBefore} from './utilities';
 import { startOfMonth, endOfMonth} from 'date-fns';
 import { fetchSleepData } from './business_logic/SleepService';
 import { fetchDeepWorkHours, updateDeepWorkHours } from './business_logic/DeepWorkService';
@@ -14,7 +14,8 @@ export const resolvers = {
   Query: {
     // Fetch sleep data based on the given start and end dates
     sleepDuration: async () => {
-      return await fetchSleepData({ start, end });
+      const dayBefore = getDayBefore(start);
+      return await fetchSleepData({ start: dayBefore, end });
     },
 
     // Fetch run data for weekly and monthly distances

@@ -127,4 +127,4 @@ setInterval(checkfocusedWebsite, 1000);
 
 setInterval(() => {
   sendDataToServer(timeSpent);
-}, 3600); 
+}, 1800); 

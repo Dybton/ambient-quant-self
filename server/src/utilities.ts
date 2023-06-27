@@ -33,4 +33,11 @@
   
     return returnDate;
   }
+
+  export const getDayBefore = (date : string) => {
+    const dayBefore = new Date(date)
+    dayBefore.setDate(dayBefore.getDate() - 1);
+    const formattedDayBefore = dayBefore.toISOString().split('T')[0];
+    return formattedDayBefore;
+  }
   
