@@ -8,6 +8,7 @@ const SleepService_1 = require("./business_logic/SleepService");
 const DeepWorkService_1 = require("./business_logic/DeepWorkService");
 const WorkoutService_1 = require("./business_logic/WorkoutService");
 const WebsiteService_1 = require("./business_logic/WebsiteService");
+const GlucoseService_1 = require("./business_logic/GlucoseService");
 const { start, end } = (0, utilities_1.getWeekStartAndEnd)();
 const startOfMonthDate = (0, date_fns_1.startOfMonth)(new Date()).toISOString().split('T')[0];
 const endOfMonthDate = (0, date_fns_1.endOfMonth)(new Date()).toISOString().split('T')[0];
@@ -15,10 +16,11 @@ exports.resolvers = {
     Query: {
         // Fetch sleep data based on the given start and end dates
         sleepDuration: async () => {
-            return await (0, SleepService_1.fetchSleepData)({ start, end });
+            const dayBefore = (0, utilities_1.getDayBefore)(start);
+            return await (0, SleepService_1.fetchSleepData)({ start: dayBefore, end });
         },
-        // Fetch run data for weekly and monthly distances
         runDistance: async () => {
+            // Once both promises are resolved, return an object with the weekly and monthly distances
             const [weeklyDistance, monthlyDistance] = await Promise.all([
                 (0, WorkoutService_1.fetchRunData)({ start, end }),
                 (0, WorkoutService_1.fetchRunData)({ start: startOfMonthDate, end: endOfMonthDate }),
@@ -29,10 +31,12 @@ exports.resolvers = {
         timeSpent: async (_, __, context) => {
             return await (0, WebsiteService_1.fetchTimeSpent)(context);
         },
-        // Fetch deep work hours data
         deepWorkHours: async () => {
-            return await (0, DeepWorkService_1.fetchDeepWorkHours)();
+            return (0, DeepWorkService_1.fetchDeepWorkHours)();
         },
+        glucoseData: async () => {
+            return await (0, GlucoseService_1.fetchMyGlucoseData)();
+        }
     },
     Mutation: {
         // Update deep work hours for a specific date

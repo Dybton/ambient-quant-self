@@ -14,5 +14,17 @@
   {
     "date": "2023-06-13",
     "deepWorkHours": 2
+  },
+  {
+    "date": "2023-06-27",
+    "deepWorkHours": 6
+  },
+  {
+    "date": "2023-06-28",
+    "deepWorkHours": 7
+  },
+  {
+    "date": "2023-07-07",
+    "deepWorkHours": 3
   }
 ]

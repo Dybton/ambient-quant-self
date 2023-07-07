@@ -5,6 +5,7 @@ import { fetchSleepData } from './business_logic/SleepService';
 import { fetchDeepWorkHours, updateDeepWorkHours } from './business_logic/DeepWorkService';
 import { fetchRunData } from './business_logic/WorkoutService';
 import { fetchTimeSpent } from './business_logic/WebsiteService';
+import { fetchMyGlucoseData } from './business_logic/GlucoseService';
 
 const { start, end } = getWeekStartAndEnd();
 const startOfMonthDate = startOfMonth(new Date()).toISOString().split('T')[0];
@@ -18,8 +19,8 @@ export const resolvers = {
       return await fetchSleepData({ start: dayBefore, end });
     },
 
-    // Fetch run data for weekly and monthly distances
     runDistance: async () => {
+      // Once both promises are resolved, return an object with the weekly and monthly distances
       const [weeklyDistance, monthlyDistance] = await Promise.all([
         fetchRunData({ start, end }),
         fetchRunData({ start: startOfMonthDate, end: endOfMonthDate }),
@@ -32,10 +33,13 @@ export const resolvers = {
       return await fetchTimeSpent(context);
     },
 
-    // Fetch deep work hours data
     deepWorkHours: async () => {
-      return await fetchDeepWorkHours();
+      return fetchDeepWorkHours();
     },
+
+    glucoseData: async () => {
+      return await fetchMyGlucoseData();
+    }
   },
 
   Mutation: {

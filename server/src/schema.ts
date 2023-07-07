@@ -26,12 +26,22 @@ export const typeDefs = gql`
     date: String!
     deepWorkHours: Int!
   }
+
+  type GlucoseMeassurePoint {
+    timeStamp: String!
+    type: Int
+    value: Float!
+    valueInMgPerDl: Int!
+    isHigh: Boolean!
+    isLow: Boolean!
+  }
   
   type Query {
     sleepDuration: [SleepDuration!]!
     runDistance: RunDistance!
     timeSpent: [TimeSpent!]!
     deepWorkHours: [DeepWork!]!
+    glucoseData: [GlucoseMeassurePoint!]!
   }
 
   type Mutation {
