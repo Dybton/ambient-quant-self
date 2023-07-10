@@ -24,7 +24,7 @@ export const typeDefs = gql`
 
   type DeepWork {
     date: String!
-    deepWorkHours: Int!
+    deepWorkHours: Float!
   }
 
   type GlucoseMeassurePoint {
@@ -45,7 +45,7 @@ export const typeDefs = gql`
   }
 
   type Mutation {
-    updateDeepWorkHours(date: String!, hours: Int!): DeepWork!
+    updateDeepWorkHours(date: String!, hours: Float!): DeepWork!
   }
 `
 ;

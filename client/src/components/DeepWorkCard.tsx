@@ -26,7 +26,7 @@ export const DEEP_WORK_QUERY = gql`
 `;
 
 const UPDATE_DEEP_WORK_HOURS = gql`
-  mutation updateDeepWorkHours($date: String!, $hours: Int!) {
+  mutation updateDeepWorkHours($date: String!, $hours: Float!) {
     updateDeepWorkHours(date: $date, hours: $hours) {
       date
       deepWorkHours
@@ -66,8 +66,8 @@ const DeepWorkCard: React.FC = () => {
     return (hours / 30) * 100; //
   };
 
-  const handleIncrement = () => {
-    const newHours = weeklyDeepWorkHours + 1;
+  const handleIncrement = (increment: number) => {
+    const newHours = weeklyDeepWorkHours + increment;
     const date = new Date().toISOString().substring(0, 10);
     updateDeepWorkHours({ variables: { date, hours: newHours } }); // We pass the date and the hours 
   };
@@ -94,10 +94,10 @@ const DeepWorkCard: React.FC = () => {
           <div className="flex flex-row items-center">
             
             {/* Make this into component */}
-            <button onClick={handleIncrement} className="hover:bg-blue-700 hover:text-white shadow-lg py-1 px-4 rounded-3xl">
+            <button onClick={() => handleIncrement(0.5)} className="hover:bg-blue-700 hover:text-white shadow-lg py-1 px-4 rounded-3xl">
               <span style={{ display: 'inline-flex', alignItems: 'center'}}><p className="mr-2">30 min</p> <PlusIcon/></span>
             </button>
-            <button onClick={handleIncrement} className="hover:bg-blue-700 hover:text-white shadow-lg py-1 px-4 rounded-3xl">
+            <button onClick={() => handleIncrement(0.75)} className="hover:bg-blue-700 hover:text-white shadow-lg py-1 px-4 rounded-3xl">
               <span style={{ display: 'inline-flex', alignItems: 'center'}}><p className="mr-2">45 min</p> <PlusIcon/></span>
             </button>
           </div>
