@@ -31,7 +31,7 @@ const HorizontalProgressBar: React.FC<HorizontalProgressBarProps> = (props) => {
         <ReactTooltip
           anchorId={`tooltip-id-${props.id}`}
           place="top"
-          content={props.websiteBar ? `${props.label}` : `${props.percentage}%`}
+          content={props.label ? `${props.label}` : `${props.percentage}%`}
         />
       )}
     </>

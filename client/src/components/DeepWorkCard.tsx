@@ -63,6 +63,9 @@ const DeepWorkCard: React.FC = () => {
   const weeklyDeepworkGoal = 30; 
   const dailyDeepworkGoal = 5;
 
+  const weeklyDeepworkHours = sumWeeklyDeepWorkHours(queryData);
+  const dailyDeepworkHours = getDailyDeepWorkHours(queryData);
+
   const handleIncrement = (increment: number) => {
     const date = new Date().toISOString().substring(0, 10);
     const dailyDeepWorkHourTally = getDailyDeepWorkHours(queryData);
@@ -70,6 +73,13 @@ const DeepWorkCard: React.FC = () => {
     const newHours = dailyDeepWorkHourTally + increment;
     updateDeepWorkHours({ variables: { date, hours: newHours } });
   };
+
+  const generateDeepWorkHoursLabel = (currentHours: number, goal:number) : string => {
+    return `${currentHours} / ${goal} hours`
+  };
+
+  const weeklyDeepWorkHoursLabel = generateDeepWorkHoursLabel(weeklyDeepworkHours, weeklyDeepworkGoal);
+  const dailyDeepWorkHoursLabel = generateDeepWorkHoursLabel(dailyDeepworkHours, dailyDeepworkGoal);
 
   return (
     <div className="shadow-lg w-full rounded-3xl h-3/5 xl:h-2/5 mt-14 ">
@@ -81,12 +91,12 @@ const DeepWorkCard: React.FC = () => {
 
         <div className='ml-8 mb-2 w-full'>
           <p className='text mb-1'> Weekly goal: {weeklyDeepworkGoal} </p>
-          <HorizontalProgressBar percentage={calculatePercentage(sumWeeklyDeepWorkHours(queryData), weeklyDeepworkGoal)} id={'h4'} h={12} w={'5/6'}/> 
+          <HorizontalProgressBar label={weeklyDeepWorkHoursLabel} percentage={calculatePercentage(weeklyDeepworkHours, weeklyDeepworkGoal)} id={'h4'} h={12} w={'5/6'}/> 
         </div>
         
         <div className='ml-8 mb-1 w-full'>
           <p className='text mb-1'> Daily goal: {dailyDeepworkGoal}</p>
-          <HorizontalProgressBar percentage={calculatePercentage(getDailyDeepWorkHours(queryData), dailyDeepworkGoal)} id={'h5'} h={12} w={'5/6'}/> 
+          <HorizontalProgressBar label={dailyDeepWorkHoursLabel} percentage={calculatePercentage(dailyDeepworkHours, dailyDeepworkGoal)} id={'h5'} h={12} w={'5/6'}/> 
         </div>
       </div>
       <div className='ml-8 flex flex-col w-full h-1/5 justify-center'>
@@ -95,7 +105,7 @@ const DeepWorkCard: React.FC = () => {
             <button onClick={() => handleIncrement(0.5)} className="hover:bg-blue-700 hover:text-white shadow-lg py-1 px-4 rounded-3xl">
               <span style={{ display: 'inline-flex', alignItems: 'center'}}><p className="mr-2">30 min</p> <PlusIcon/></span>
             </button>
-            <button onClick={() => handleIncrement(0.75)} className="hover:bg-blue-700 hover:text-white shadow-lg py-1 px-4 rounded-3xl">
+            <button onClick={() => handleIncrement(0.75)} className="hover:bg-blue-700 hover:text-white shadow-lg py-1 px-4 rounded-3xl ml-4">
               <span style={{ display: 'inline-flex', alignItems: 'center'}}><p className="mr-2">45 min</p> <PlusIcon/></span>
             </button>
           </div>
