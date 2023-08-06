@@ -34,42 +34,41 @@ const UPDATE_DEEP_WORK_HOURS = gql`
   }
 `;
 
-// Function takes array of Deepwork objects and returns the sum of the deepwork hours
 const sumWeeklyDeepWorkHours = (data: DeepWorkHoursData): number => {
   return data.deepWorkHours.reduce((sum, item) => sum + item.deepWorkHours, 0);
 };
+
+const getDailyDeepWorkHours = (data : DeepWorkHoursData) => {
+    const date = new Date().toISOString().substring(0, 10); 
+    const dailyDeepWorkHourTally = data.deepWorkHours.find((item: DeepWork) => item.date === date)?.deepWorkHours || 0;
+    return dailyDeepWorkHourTally;
+  }
+
+const calculatePercentage = (hours: number, goal : number) => {
+  return (hours / goal) * 100;
+};
   
 const DeepWorkCard: React.FC = () => {
-  const [weeklyDeepWorkHours, setWeeklyDeepWorkHours] = React.useState(0);
-
-  const { loading, error, data} = useQuery(DEEP_WORK_QUERY);
+  const { loading, error, data: queryData, refetch} = useQuery(DEEP_WORK_QUERY);
 
   const [updateDeepWorkHours] = useMutation(UPDATE_DEEP_WORK_HOURS, {
-    onCompleted: (data) => {
-      const summedUpdatedDeepworkHours = sumWeeklyDeepWorkHours({ deepWorkHours: [data.updateDeepWorkHours] });
-      setWeeklyDeepWorkHours(summedUpdatedDeepworkHours);
+    onCompleted: () => { 
+      refetch();
     },
   });
-    
-  useEffect(() => {
-    if (data) {
-      setWeeklyDeepWorkHours(sumWeeklyDeepWorkHours(data));
-    }
-  }, [data]);
   
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  // This needs to be a state
   const weeklyDeepworkGoal = 30; 
-  const calculatePercentage = (hours: number) => {
-    return (hours / 30) * 100; //
-  };
+  const dailyDeepworkGoal = 5;
 
   const handleIncrement = (increment: number) => {
-    const newHours = weeklyDeepWorkHours + increment;
     const date = new Date().toISOString().substring(0, 10);
-    updateDeepWorkHours({ variables: { date, hours: newHours } }); // We pass the date and the hours 
+    const dailyDeepWorkHourTally = getDailyDeepWorkHours(queryData);
+
+    const newHours = dailyDeepWorkHourTally + increment;
+    updateDeepWorkHours({ variables: { date, hours: newHours } });
   };
 
   return (
@@ -80,20 +79,19 @@ const DeepWorkCard: React.FC = () => {
       <div className='flex mt-1 flex-col w-full'>
         <div style={{borderTop: '2px solid #E4E2E0', width: '100%'}}></div>
 
-        {/* Make these into components */}
         <div className='ml-8 mb-2 w-full'>
           <p className='text mb-1'> Weekly goal: {weeklyDeepworkGoal} </p>
-          <HorizontalProgressBar percentage={calculatePercentage(weeklyDeepWorkHours)} id={'h4'} h={12} w={'5/6'}/> 
+          <HorizontalProgressBar percentage={calculatePercentage(sumWeeklyDeepWorkHours(queryData), weeklyDeepworkGoal)} id={'h4'} h={12} w={'5/6'}/> 
         </div>
+        
         <div className='ml-8 mb-1 w-full'>
-          <p className='text mb-1'> Daily goal: 5</p>
-          <HorizontalProgressBar percentage={calculatePercentage(weeklyDeepWorkHours)} id={'h5'} h={12} w={'5/6'}/> 
+          <p className='text mb-1'> Daily goal: {dailyDeepworkGoal}</p>
+          <HorizontalProgressBar percentage={calculatePercentage(getDailyDeepWorkHours(queryData), dailyDeepworkGoal)} id={'h5'} h={12} w={'5/6'}/> 
         </div>
       </div>
       <div className='ml-8 flex flex-col w-full h-1/5 justify-center'>
           <div className="flex flex-row items-center">
             
-            {/* Make this into component */}
             <button onClick={() => handleIncrement(0.5)} className="hover:bg-blue-700 hover:text-white shadow-lg py-1 px-4 rounded-3xl">
               <span style={{ display: 'inline-flex', alignItems: 'center'}}><p className="mr-2">30 min</p> <PlusIcon/></span>
             </button>
