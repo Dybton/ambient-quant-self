@@ -2,7 +2,7 @@ process.env.TZ = 'Europe/Copenhagen';
 import { getWeekStartAndEnd, getDayBefore} from './utilities';
 import { startOfMonth, endOfMonth} from 'date-fns';
 import { fetchSleepData } from './business_logic/SleepService';
-import { fetchDeepWorkHours, updateDeepWorkHours } from './business_logic/DeepWorkService';
+import { fetchWeekDeepWorkData, updateDeepWorkHours } from './business_logic/DeepWorkService';
 import { fetchRunData } from './business_logic/WorkoutService';
 import { fetchTimeSpent } from './business_logic/WebsiteService';
 import { fetchMyGlucoseData } from './business_logic/GlucoseService';
@@ -34,7 +34,7 @@ export const resolvers = {
     },
 
     deepWorkHours: async () => {
-      return fetchDeepWorkHours();
+      return fetchWeekDeepWorkData();
     },
 
     glucoseData: async () => {

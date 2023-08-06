@@ -34,7 +34,7 @@ const isCurrentWeek = (dateString: string): boolean => {
   return date >= currentWeekStart && date <= currentWeekEnd;
 };
 
-export const fetchDeepWorkHours = (): DeepWorkEntry[] => {
+export const fetchWeekDeepWorkData = (): DeepWorkEntry[] => {
   const data = readData();
   const currentWeekData = data.filter((entry) => isCurrentWeek(entry.date));
   return currentWeekData;
